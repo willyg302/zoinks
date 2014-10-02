@@ -1,0 +1,8 @@
+{
+  "name": "SCUBA",
+  "version": "0.0.0",
+  "homepage": "https://github.com/willyg302/SCUBA",
+  "description": "SCUBA Dive Planner Project for ICS 414",
+  "license": "MIT",
+  "private": true
+}
