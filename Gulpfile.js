@@ -1,9 +1,13 @@
 var gulp       = require('gulp');
-var stylus     = require('gulp-stylus');
+var jshint     = require('gulp-jshint');
+var less       = require('gulp-less');
+var minifycss  = require('gulp-minify-css');
+var mocha      = require('gulp-mocha');
 var uglify     = require('gulp-uglify');
 
 var browserify = require('browserify');
 var del        = require('del');
+var stylish    = require('jshint-stylish');
 var reactify   = require('reactify');
 var buffer     = require('vinyl-buffer');
 var vinyl      = require('vinyl-source-stream');
@@ -11,13 +15,15 @@ var vinyl      = require('vinyl-source-stream');
 
 var paths = {
 	assets: [
-		//'./app/img/**/*.*',
+		'./app/img/**/*.*',
 		'./app/index.html'
 	],
 	app: './app',
 	dist: './dist',
-	css: ['src/css/**/*.styl'],
-	js: './app/js/app.js'
+	css: './app/less/main.less',
+	js: './app/js/app.js',
+	test: './test/**/*-spec.js',
+	lintme: './app/js/**/*.js'
 };
 
 gulp.task('clean', function(cb) {
@@ -30,10 +36,10 @@ gulp.task('copy-assets', function() {
 });
 
 gulp.task('compile-css', function() {
-	/*
 	return gulp.src(paths.css)
-		.pipe(stylus())
-		.pipe(gulp.dest(paths.dist));*/
+		.pipe(less())
+		.pipe(minifycss())
+		.pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('compile-js', function() {
@@ -46,6 +52,17 @@ gulp.task('compile-js', function() {
 		.pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('default', ['clean'], function() {
+gulp.task('lint', function() {
+	return gulp.src(paths.lintme)
+		.pipe(jshint())
+		.pipe(jshint.reporter(stylish));
+});
+
+gulp.task('test', ['lint'], function() {
+	return gulp.src(paths.test)
+		.pipe(mocha());
+});
+
+gulp.task('default', ['clean', 'test'], function() {
 	gulp.start('copy-assets', 'compile-css', 'compile-js');
 });
