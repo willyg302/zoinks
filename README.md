@@ -17,7 +17,7 @@ SCUBA Dive Planner Project for ICS 414.
 2. Grab Zoinks, build it, and start the development server
 
    ```bash
-   strap init gh:willyg302/zoinks
+   strap init gh:willyg302/zoinks -d zoinks
    cd zoinks
    strap run build
    strap

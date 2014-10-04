@@ -1,9 +1,59 @@
 html {
 	min-height: 100%;
-	#gradient > .vertical(@start-color: @ocean-top; @end-color: @ocean-bottom);
+	#gradient > .vertical(@start-color: @color-ocean-top; @end-color: @color-ocean-bottom);
 }
 
 body {
 	margin: 0;
 	background: none;
+}
+
+.row {
+	left: 0;
+	right: 0;
+	position: absolute;
+	overflow: hidden;
+	padding: @row-padding;
+}
+
+.body {
+	top: 0;
+	bottom: @footer-height + 2 * @row-padding;
+	overflow: auto;
+	
+	& div:first-child {
+		white-space: nowrap;
+	}
+}
+
+.footer {
+	height: @footer-height + 2 * @row-padding;
+	bottom: 0;
+
+	img {
+		height: @footer-height;
+	}
+}
+
+.dive {
+	width: @dive-box-width;
+	height: @dive-box-height;
+	border: 5px dashed @color-dive-box;
+	border-radius: 20px;
+	padding: @row-padding;
+	position: relative;
+	display: inline-block;
+	margin-right: @row-padding;
+
+	h3 {
+		margin: 0px @row-padding;
+	}
+
+	input {
+		outline: none;
+		border: none;
+		width: 100%;
+		background: transparent;
+		color: white;
+	}
 }

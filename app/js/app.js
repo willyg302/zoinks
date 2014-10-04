@@ -1,5 +1,15 @@
 var React = require('react');
 
-var view = require('./views/view.jsx');
+var profile = require('./components/profile.jsx');
 
-React.renderComponent(view(), document.getElementById('content'));
+
+var data = [
+	{
+		title: 'Dive 1'
+	},
+	{
+		title: 'Dive 2'
+	}
+];
+
+React.renderComponent(profile({data: data}), document.getElementById('content'));
