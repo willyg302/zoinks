@@ -8,7 +8,7 @@ var profile = React.createClass({
 			return <dive key={index} title={value.title} />
 		});
 		return (
-			<div>
+			<div className="profile">
 				{dives}
 			</div>
 		);
