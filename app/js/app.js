@@ -1,15 +1,18 @@
 var React = require('react');
 
-var profile = require('./components/profile.jsx');
+var dashboard = require('./components/dashboard.jsx');
+var profile   = require('./components/profile.jsx');
 
 
-var data = [
+React.renderComponent(profile({data: [
 	{
-		title: 'Dive 1'
-	},
-	{
-		title: 'Dive 2'
+		title: 'My Dive'
 	}
-];
+]}), document.getElementById('profile'));
 
-React.renderComponent(profile({data: data}), document.getElementById('content'));
+React.renderComponent(dashboard({icons: [
+	{name: 'settings'},
+	{name: 'help'},
+	{name: 'save'},
+	{name: 'load'}
+]}), document.getElementById('dashboard'));

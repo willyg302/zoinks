@@ -25,14 +25,53 @@ body {
 .footer {
 	height: @footer-height + 2 * @row-padding;
 	bottom: 0;
+	display: inline-flex;
 
 	img {
 		height: @footer-height;
+	}
+
+	#logo {
+		margin-right: @footer-height;
+	}
+}
+
+a.icon {
+	position: relative;
+	display: inline-block;
+	height: @footer-height;
+	margin-right: @row-padding;
+	margin-bottom: @row-padding;
+
+	&:hover:after {
+		background-color: transparent;
+	}
+
+	&:after {
+		content: ''; 
+		position: absolute; 
+		top: 0; 
+		right: 0; 
+		bottom: 0; 
+		left: 0;
+
+		border-radius: @row-padding;
+		background-color: @color-dive-box;
+		.transition(background-color 0.4s);
+	}
+
+	object {
+		height: 100%
 	}
 }
 
 .profile {
 	white-space: nowrap;
+}
+
+.plusminus {
+	display: inline-block;
+	position: absolute;
 }
 
 .dive {
