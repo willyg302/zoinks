@@ -1,34 +1,48 @@
 var React = require('react');
 
-var dive = require('./dive.jsx');
-var icon = require('./icon.jsx');
+var Dive = require('./dive.jsx');
+var Icon = require('./icon.jsx');
 
-var profile = React.createClass({
+var Profile = React.createClass({
+	getInitialState: function() {
+		return {
+			dives: [{ title: 'My Dive' }]
+		};
+	},
 	addDive: function() {
-		this.setProps({
-			data: this.props.data.concat([{
+		this.setState({
+			dives: this.state.dives.concat([{
 				title: 'New Dive'
 			}])
 		});
+		this.diveAdded = true;
 	},
 	removeDive: function() {
-		this.setProps({
-			data: this.props.data.slice(0, -1)
+		this.setState({
+			dives: this.state.dives.slice(0, -1)
 		});
 	},
+	componentDidUpdate: function() {
+		if (this.diveAdded) {
+			// Scroll all the way to the right to see the new dive
+			var profileDiv = document.getElementById('profile');
+			profileDiv.scrollLeft = profileDiv.scrollWidth;
+			this.diveAdded = false;
+		}
+	},
 	render: function() {
-		var dives = this.props.data.map(function(value, index) {
-			return <dive key={index} title={value.title} />
+		var dives = this.state.dives.map(function(value, index) {
+			return <Dive key={index} title={value.title} />
 		});
 		var minus;
-		if (this.props.data.length > 1) {
-			minus = <icon name="minus" click={this.removeDive} />;
+		if (this.state.dives.length > 1) {
+			minus = <Icon name="minus" click={this.removeDive} position="left" desc="Remove Last Dive" />;
 		}
 		return (
 			<div className="profile">
 				{dives}
 				<div className="plusminus">
-					<icon name="plus" click={this.addDive} />
+					<Icon name="plus" click={this.addDive} position="left" desc="Add New Dive" />
 					<br />
 					{minus}
 				</div>
@@ -37,4 +51,4 @@ var profile = React.createClass({
 	}
 });
 
-module.exports = profile;
+module.exports = Profile;

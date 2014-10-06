@@ -1,17 +1,24 @@
 var React = require('react');
 
-var icon = require('./icon.jsx');
+var ModalIcon = require('./modal-icon.jsx');
 
-var dashboard = React.createClass({
+var Dashboard = React.createClass({
 	render: function() {
+		var modalBody = <span>Hey there!</span>;
+		var ok = function() {};
 		return (
 			<div>
-				{this.props.icons.map(function(i, index) {
-					return <icon key={index} name={i.name} />
-				})}
+				<ModalIcon position="top" name="settings" desc="Settings"
+				           modalBody={modalBody} cancel="Cancel" ok="Save" okFunction={ok} />
+				<ModalIcon position="top" name="help" desc="Help"
+				           modalBody={modalBody} ok="Got It!" okFunction={ok} />
+				<ModalIcon position="top" name="save" desc="Export Dive Plan"
+				           modalBody={modalBody} ok="OK" okFunction={ok} />
+				<ModalIcon position="top" name="load" desc="Import Dive Plan"
+				           modalBody={modalBody} cancel="Cancel" ok="Import" okFunction={ok} />
 			</div>
 		);
 	}
 });
 
-module.exports = dashboard;
+module.exports = Dashboard;

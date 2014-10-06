@@ -1,6 +1,6 @@
 var React = require('react');
 
-var dive = React.createClass({
+var Dive = React.createClass({
 	onEditTitle: function(e) {
 		this.setProps({
 			title: e.target.value
@@ -15,4 +15,4 @@ var dive = React.createClass({
 	}
 });
 
-module.exports = dive;
+module.exports = Dive;
