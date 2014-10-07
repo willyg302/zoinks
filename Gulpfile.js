@@ -1,13 +1,10 @@
 var gulp       = require('gulp');
-var jshint     = require('gulp-jshint');
 var less       = require('gulp-less');
 var minifycss  = require('gulp-minify-css');
-var mocha      = require('gulp-mocha');
 var uglify     = require('gulp-uglify');
 
 var browserify = require('browserify');
 var del        = require('del');
-var stylish    = require('jshint-stylish');
 var reactify   = require('reactify');
 var buffer     = require('vinyl-buffer');
 var vinyl      = require('vinyl-source-stream');
@@ -21,9 +18,7 @@ var paths = {
 	app: './app',
 	dist: './dist',
 	css: './app/less/main.less',
-	js: './app/js/app.js',
-	test: './test/**/*-spec.js',
-	lintme: './app/js/**/*.js'
+	js: './app/js/app.js'
 };
 
 gulp.task('clean', function(cb) {
@@ -52,17 +47,6 @@ gulp.task('compile-js', function() {
 		.pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('lint', function() {
-	return gulp.src(paths.lintme)
-		.pipe(jshint())
-		.pipe(jshint.reporter(stylish));
-});
-
-gulp.task('test', ['lint'], function() {
-	return gulp.src(paths.test)
-		.pipe(mocha());
-});
-
-gulp.task('default', ['clean', 'test'], function() {
+gulp.task('default', ['clean'], function() {
 	gulp.start('copy-assets', 'compile-css', 'compile-js');
 });

@@ -1,10 +1,13 @@
 project = 'Zoinks'
 
 def build():
-	strap.node('gulp', module=True)
+	strap.run(test).node('gulp', module=True)
 
 def test():
-	strap.node('gulp test', module=True)
+	# Lint all JS and JSX files
+	strap.node('jsxhint --reporter node_modules/jshint-stylish/stylish.js app/js/.', module=True)
+	# Run Jest
+	strap.npm('test')
 
 def install():
 	strap.npm('install')
