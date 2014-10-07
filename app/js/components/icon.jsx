@@ -9,8 +9,8 @@
  */
 var React = require('react');
 
-var OverlayTrigger = require('../../../node_modules/react-bootstrap/OverlayTrigger');
-var Tooltip = require('../../../node_modules/react-bootstrap/Tooltip');
+var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
+var Tooltip = require('react-bootstrap/Tooltip');
 
 var Icon = React.createClass({
 	handleClick: function(e) {

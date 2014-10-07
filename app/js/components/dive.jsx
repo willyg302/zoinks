@@ -9,18 +9,18 @@
  */
 var React = require('react');
 
+var ProfileActions = require('../actions/profile-actions');
+
 var Dive = React.createClass({
-	onEditTitle: function(e) {
-		this.setProps({
-			title: e.target.value
-		});
-	},
 	render: function() {
 		return (
 			<div className="dive">
-				<h3><input onChange={this.onEditTitle} value={this.props.title} maxLength="140" /></h3>
+				<h3><input onChange={this._onEditTitle} value={this.props.title} maxLength="140" /></h3>
 			</div>
 		);
+	},
+	_onEditTitle: function(e) {
+		ProfileActions.updateDiveTitle(this.props.id, e.target.value);
 	}
 });
 

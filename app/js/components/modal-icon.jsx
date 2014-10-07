@@ -9,9 +9,9 @@
  */
 var React = require('react');
 
-var Button = require('../../../node_modules/react-bootstrap/Button');
-var Modal = require('../../../node_modules/react-bootstrap/Modal');
-var OverlayMixin = require('../../../node_modules/react-bootstrap/OverlayMixin');
+var Button = require('react-bootstrap/Button');
+var Modal = require('react-bootstrap/Modal');
+var OverlayMixin = require('react-bootstrap/OverlayMixin');
 
 var Icon = require('./icon.jsx');
 
