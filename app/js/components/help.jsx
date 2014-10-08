@@ -10,22 +10,21 @@
 var React = require('react');
 
 var ModalIcon = require('./modal-icon.jsx');
-var Settings = require('./settings.jsx');
-var Help = require('./help.jsx');
-var Export = require('./export.jsx');
-var Import = require('./import.jsx');
 
-var Dashboard = React.createClass({
+var Help = React.createClass({
 	render: function() {
-		return (
+		var modalBody = (
 			<div>
-				<Settings />
-				<Help />
-				<Export />
-				<Import />
+				// @TODO
+				Help text here.
 			</div>
+		);
+		var ok = function() {};
+		return (
+			<ModalIcon position="top" name="help" desc="Help"
+			           modalBody={modalBody} ok="Got It!" okFunction={ok} />
 		);
 	}
 });
 
-module.exports = Dashboard;
+module.exports = Help;
