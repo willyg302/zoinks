@@ -13,19 +13,19 @@ var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
 var Tooltip = require('react-bootstrap/Tooltip');
 
 var Icon = React.createClass({
-	handleClick: function(e) {
-		e.preventDefault();
-		this.props.click();
-	},
 	render: function() {
 		var tooltip = <Tooltip>{this.props.desc}</Tooltip>;
 		return (
-			<OverlayTrigger placement={this.props.position} overlay={tooltip}>
-				<a href="#" className="icon" onClick={this.handleClick}>
+			<OverlayTrigger placement={this.props.position || "top"} overlay={tooltip}>
+				<a className="icon" onClick={this._onClick}>
 					<object data={"img/" + this.props.name + ".svg"} type="image/svg+xml"></object>
 				</a>
 			</OverlayTrigger>
 		);
+	},
+	_onClick: function(e) {
+		e.preventDefault();
+		this.props.click();
 	}
 });
 

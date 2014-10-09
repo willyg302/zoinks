@@ -21,7 +21,9 @@ var _profile = {
 	units: 'feet',
 	dives: [{
 		id: 0,
-		title: 'My Dive'
+		title: 'My Dive',
+		depth: 50,
+		time: 3
 	}]
 };
 
@@ -29,7 +31,9 @@ var _profile = {
 function addDive() {
 	_profile.dives.push({
 		id: _profile.dives.length,
-		title: 'New Dive'
+		title: 'New Dive',
+		depth: 50,
+		time: 3
 	});
 }
 
@@ -39,6 +43,22 @@ function removeDive() {
 
 function updateDiveTitle(id, title) {
 	_profile.dives[id].title = title;
+}
+
+function updateDiveDepth(id, depth) {
+	_profile.dives[id].depth = depth;
+}
+
+function updateDiveTime(id, time) {
+	_profile.dives[id].time = time;
+}
+
+function changeProfileUnits(units) {
+	_profile.units = units;
+}
+
+function loadProfile(profile) {
+	_profile = profile;
 }
 
 
@@ -71,6 +91,18 @@ AppDispatcher.register(function(payload) {
 		case Constants.DIVE_UPDATE_TITLE:
 			updateDiveTitle(action.id, action.title);
 			break;
+		case Constants.DIVE_UPDATE_DEPTH:
+			updateDiveDepth(action.id, action.depth);
+			break;
+		case Constants.DIVE_UPDATE_TIME:
+			updateDiveTime(action.id, action.time);
+			break;
+		case Constants.PROFILE_CHANGE_UNITS:
+			changeProfileUnits(action.units);
+			break;
+		case Constants.PROFILE_LOAD:
+			loadProfile(action.profile);
+			break;
 		default:
 			return true;
 	}
@@ -80,12 +112,5 @@ AppDispatcher.register(function(payload) {
 
 	return true;
 });
-
-/*
-	DIVE_UPDATE_DEPTH: null,
-	DIVE_UPDATE_TIME: null,
-	PROFILE_CHANGE_UNITS: null,
-	PROFILE_LOAD: null
-*/
 
 module.exports = ProfileStore;

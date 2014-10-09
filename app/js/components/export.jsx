@@ -9,20 +9,12 @@
  */
 var React = require('react');
 
-var ProfileStore = require('../stores/profile-store');
-
 var ModalIcon = require('./modal-icon.jsx');
+var WatchProfileMixin = require('./watch-profile-mixin');
 
 var Export = React.createClass({
-	getInitialState: function() {
-		return ProfileStore.getProfile();
-	},
-	componentDidMount: function() {
-		ProfileStore.addChangeListener(this._onChange);
-	},
-	componentWillUnmount: function() {
-		ProfileStore.removeChangeListener(this._onChange);
-	},
+	mixins: [WatchProfileMixin],
+
 	render: function() {
 		var modalBody = (
 			<div>
@@ -30,14 +22,9 @@ var Export = React.createClass({
 				<p>Please copy the above string.</p>
 			</div>
 		);
-		var ok = function() {};
 		return (
-			<ModalIcon position="top" name="export" desc="Export Dive Plan"
-			           modalBody={modalBody} ok="OK" okFunction={ok} />
+			<ModalIcon name="export" desc="Export Dive Plan" modalBody={modalBody} primary="OK" />
 		);
-	},
-	_onChange: function(actionType) {
-		this.setState(ProfileStore.getProfile());
 	}
 });
 

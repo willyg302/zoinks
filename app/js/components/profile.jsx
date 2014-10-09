@@ -11,21 +11,14 @@ var React = require('react');
 
 var Constants = require('../constants');
 var ProfileActions = require('../actions/profile-actions');
-var ProfileStore = require('../stores/profile-store');
 
 var Dive = require('./dive.jsx');
 var Icon = require('./icon.jsx');
+var WatchProfileMixin = require('./watch-profile-mixin');
 
 var Profile = React.createClass({
-	getInitialState: function() {
-		return ProfileStore.getProfile();
-	},
-	componentDidMount: function() {
-		ProfileStore.addChangeListener(this._onChange);
-	},
-	componentWillUnmount: function() {
-		ProfileStore.removeChangeListener(this._onChange);
-	},
+	mixins: [WatchProfileMixin],
+
 	render: function() {
 		var dives = this.state.dives.map(function(value, index) {
 			return <Dive key={index} id={value.id} title={value.title} />;
@@ -46,17 +39,12 @@ var Profile = React.createClass({
 		);
 	},
 
-	/**
-	 * Event handler for change events coming from the ProfileStore.
-	 */
-	_onChange: function(actionType) {
-		this.setState(ProfileStore.getProfile(), function() {
-			if (actionType === Constants.DIVE_ADD) {
-				// Scroll all the way to the right to see the new dive
-				var profileDiv = document.getElementById('profile');
-				profileDiv.scrollLeft = profileDiv.scrollWidth;
-			}
-		});
+	_onProfileChange: function(actionType) {
+		if (actionType === Constants.DIVE_ADD) {
+			// Scroll all the way to the right to see the new dive
+			var profileDiv = document.getElementById('profile');
+			profileDiv.scrollLeft = profileDiv.scrollWidth;
+		}
 	},
 	_onAddDiveClick: function() {
 		ProfileActions.addDive();

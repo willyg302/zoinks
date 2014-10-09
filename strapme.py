@@ -4,9 +4,9 @@ def cloc():
 	'''Count LOC'''
 	loc = 'find app/js/ {} -type f | xargs wc -l'
 	print('Functionality LOC:')
-	# @TODO
+	strap.run(loc.format('! -path *components* ! -name "*-test.js"'))
 	print('Interface LOC:')
-	strap.run(loc.format('! -name "*-test.js"'))
+	strap.run(loc.format('-path *components* ! -name "*-test.js"'))
 	print('Test LOC:')
 	strap.run(loc.format('-name "*-test.js"'))
 

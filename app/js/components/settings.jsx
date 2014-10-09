@@ -9,21 +9,45 @@
  */
 var React = require('react');
 
+var Input = require('react-bootstrap/Input');
+
+var ProfileActions = require('../actions/profile-actions');
+var ProfileStore = require('../stores/profile-store');
+
 var ModalIcon = require('./modal-icon.jsx');
 
 var Settings = React.createClass({
+	getInitialState: function() {
+		return {
+			units: ProfileStore.getProfile().units
+		};
+	},
+	handleChange: function() {
+		this.setState({
+			units: this.refs.units.getValue()
+		});
+	},
 	render: function() {
 		var modalBody = (
 			<div>
-				// @TODO
-				Settings body here.
+				<Input type="select" ref="units" value={this.state.units} label="Units" onChange={this.handleChange}
+				       help="Choose whether to use feet or meters for depth units.">
+					<option value="feet">Feet</option>
+					<option value="meters">Meters</option>
+				</Input>
 			</div>
 		);
-		var ok = function() {};
 		return (
-			<ModalIcon position="top" name="settings" desc="Settings"
-			           modalBody={modalBody} cancel="Cancel" ok="Save" okFunction={ok} />
+			<ModalIcon name="settings" desc="Settings" modalBody={modalBody} cancel="Cancel"
+			           primary="Save" onClickPrimary={this._onClickSave} onOpen={this._onOpen} />
 		);
+	},
+	_onClickSave: function() {
+		ProfileActions.changeProfileUnits(this.state.units);
+		return true;
+	},
+	_onOpen: function() {
+		this.setState(this.getInitialState());
 	}
 });
 

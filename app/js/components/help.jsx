@@ -19,10 +19,8 @@ var Help = React.createClass({
 				Help text here.
 			</div>
 		);
-		var ok = function() {};
 		return (
-			<ModalIcon position="top" name="help" desc="Help"
-			           modalBody={modalBody} ok="Got It!" okFunction={ok} />
+			<ModalIcon name="help" desc="Help" modalBody={modalBody} primary="Got It!" />
 		);
 	}
 });

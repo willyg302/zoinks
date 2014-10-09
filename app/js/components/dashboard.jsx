@@ -9,7 +9,6 @@
  */
 var React = require('react');
 
-var ModalIcon = require('./modal-icon.jsx');
 var Settings = require('./settings.jsx');
 var Help = require('./help.jsx');
 var Export = require('./export.jsx');

@@ -42,6 +42,7 @@ a.icon {
 	height: @footer-height;
 	margin-right: @row-padding;
 	margin-bottom: @row-padding;
+	cursor: pointer;
 
 	&:hover:after {
 		background-color: transparent;
@@ -94,5 +95,17 @@ a.icon {
 		width: 100%;
 		background: transparent;
 		color: white;
+	}
+}
+
+.disclaimer {
+	width: 500px;
+	color: @color-disclaimer;
+	font-size: 22px;
+	font-weight: bold;
+	margin-left: @footer-height;
+
+	@media screen and (max-width: @screen-break) {
+		display: none;
 	}
 }

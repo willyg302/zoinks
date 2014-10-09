@@ -23,18 +23,9 @@ var ModalIcon = React.createClass({
 			isModalOpen: false
 		};
 	},
-	handleToggle: function() {
-		this.setState({
-			isModalOpen: !this.state.isModalOpen
-		});
-	},
-	handleOkFunction: function() {
-		this.props.okFunction();
-		this.handleToggle();
-	},
 	render: function() {
 		return (
-			<Icon name={this.props.name} click={this.handleToggle} position={this.props.position} desc={this.props.desc} />
+			<Icon name={this.props.name} click={this._onOpenModal} position={this.props.position} desc={this.props.desc} />
 		);
 	},
 	renderOverlay: function() {
@@ -43,19 +34,51 @@ var ModalIcon = React.createClass({
 		}
 		var cancel;
 		if (this.props.cancel) {
-			cancel = <Button onClick={this.handleToggle}>{this.props.cancel}</Button>;
+			cancel = <Button onClick={this._onClickCancel}>{this.props.cancel}</Button>;
 		}
 		return (
-			<Modal title={this.props.desc} onRequestHide={this.handleToggle}>
+			<Modal title={this.props.desc} onRequestHide={this._onCloseModal}>
 				<div className="modal-body">
 					{this.props.modalBody}
 				</div>
 				<div className="modal-footer">
 					{cancel}
-					<Button bsStyle="primary" onClick={this.handleOkFunction}>{this.props.ok}</Button>
+					<Button bsStyle="primary" onClick={this._onClickPrimary}>{this.props.primary}</Button>
 				</div>
 			</Modal>
 		);
+	},
+	_onOpenModal: function() {
+		this.setState({
+			isModalOpen: true
+		}, function() {
+			if (typeof this.props.onOpen == 'function') {
+				this.props.onOpen();
+			}
+		});
+	},
+	_onCloseModal: function() {
+		this.setState({
+			isModalOpen: false
+		}, function() {
+			if (typeof this.props.onClose == 'function') {
+				this.props.onClose();
+			}
+		});
+	},
+	_onClickCancel: function() {
+		if (typeof this.props.onClickCancel == 'function') {
+			this.props.onClickCancel();
+		}
+		this._onCloseModal();
+	},
+	_onClickPrimary: function() {
+		if (typeof this.props.onClickPrimary == 'function') {
+			if (!this.props.onClickPrimary()) {
+				return;
+			}
+		}
+		this._onCloseModal();
 	}
 });
 
