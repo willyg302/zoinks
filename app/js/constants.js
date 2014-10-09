@@ -12,9 +12,7 @@ var keyMirror = require('react/lib/keyMirror');
 module.exports = keyMirror({
 	DIVE_ADD: null,
 	DIVE_REMOVE: null,
-	DIVE_UPDATE_TITLE: null,
-	DIVE_UPDATE_DEPTH: null,
-	DIVE_UPDATE_TIME: null,
+	DIVE_UPDATE: null,
 	PROFILE_CHANGE_UNITS: null,
 	PROFILE_LOAD: null
 });

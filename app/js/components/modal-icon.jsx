@@ -52,7 +52,7 @@ var ModalIcon = React.createClass({
 		this.setState({
 			isModalOpen: true
 		}, function() {
-			if (typeof this.props.onOpen == 'function') {
+			if (typeof this.props.onOpen === 'function') {
 				this.props.onOpen();
 			}
 		});
@@ -61,19 +61,19 @@ var ModalIcon = React.createClass({
 		this.setState({
 			isModalOpen: false
 		}, function() {
-			if (typeof this.props.onClose == 'function') {
+			if (typeof this.props.onClose === 'function') {
 				this.props.onClose();
 			}
 		});
 	},
 	_onClickCancel: function() {
-		if (typeof this.props.onClickCancel == 'function') {
+		if (typeof this.props.onClickCancel === 'function') {
 			this.props.onClickCancel();
 		}
 		this._onCloseModal();
 	},
 	_onClickPrimary: function() {
-		if (typeof this.props.onClickPrimary == 'function') {
+		if (typeof this.props.onClickPrimary === 'function') {
 			if (!this.props.onClickPrimary()) {
 				return;
 			}

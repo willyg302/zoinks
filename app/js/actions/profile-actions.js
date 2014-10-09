@@ -9,6 +9,7 @@
  */
 var AppDispatcher = require('../dispatcher/app-dispatcher');
 var Constants = require('../constants');
+var utils = require('../utils');
 
 var ProfileActions = {
 	addDive: function() {
@@ -21,25 +22,11 @@ var ProfileActions = {
 			actionType: Constants.DIVE_REMOVE
 		});
 	},
-	updateDiveTitle: function(id, title) {
+	updateDive: function(id, delta) {
 		AppDispatcher.handleViewAction({
-			actionType: Constants.DIVE_UPDATE_TITLE,
+			actionType: Constants.DIVE_UPDATE,
 			id: id,
-			title: title
-		});
-	},
-	updateDiveDepth: function(id, depth) {
-		AppDispatcher.handleViewAction({
-			actionType: Constants.DIVE_UPDATE_DEPTH,
-			id: id,
-			depth: depth
-		});
-	},
-	updateDiveTime: function(id, time) {
-		AppDispatcher.handleViewAction({
-			actionType: Constants.DIVE_UPDATE_TIME,
-			id: id,
-			time: time
+			delta: delta
 		});
 	},
 	changeProfileUnits: function(units) {
@@ -53,6 +40,47 @@ var ProfileActions = {
 			actionType: Constants.PROFILE_LOAD,
 			profile: profile
 		});
+	},
+
+	updateDiveTitle: function(id, title) {
+		this.updateDive(id, {title: title});
+	},
+	updateDiveDepth: function(id, depth) {
+		this.updateDive(id, {depth: depth});
+	},
+	updateDiveTime: function(id, time) {
+		this.updateDive(id, {time: time});
+	},
+
+	/**
+	 * Attempts to load a profile from a string, with validation checks.
+	 * Returns true if the profile was loaded, false otherwise.
+	 */
+	loadProfileFromString: function(s) {
+		try {
+			var json = JSON.parse(s);
+			var valid = utils.validate(json, {
+				units: function(e) {
+					return ['feet', 'meters'].indexOf(e) !== -1;
+				},
+				dives: [{
+					id: 'number',
+					title: 'string',
+					depth: function(e) {
+						return e >= 0;
+					},
+					time: function(e) {
+						return e >= 0;
+					}
+				}]
+			});
+			if (valid) {
+				this.loadProfile(json);
+			}
+			return valid;
+		} catch (e) {
+			return false;
+		}
 	}
 };
 

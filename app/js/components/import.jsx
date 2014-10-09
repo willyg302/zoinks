@@ -22,25 +22,6 @@ var Import = React.createClass({
 			valid: true
 		};
 	},
-	validateInput: function(s) {
-		try {
-			json = JSON.parse(s);
-			if (!(json.units === 'feet' || json.units === 'meters')) {
-				return false;
-			}
-			for (var i = 0; i < json.dives.length; i++) {
-				if (json.dives[i].id !== i) {
-					return false;
-				}
-				if (json.dives[i].depth < 0 || json.dives[i].time < 0) {
-					return false;
-				}
-			}
-		} catch (e) {
-			return false;
-		}
-		return true;
-	},
 	render: function() {
 		var alert;
 		if (!this.state.valid) {
@@ -59,11 +40,8 @@ var Import = React.createClass({
 		);
 	},
 	_onClickImport: function() {
-		var toImport = this.refs.input.getValue();
-		var valid = this.validateInput(toImport);
-		if (valid) {
-			ProfileActions.loadProfile(JSON.parse(toImport));
-		} else {
+		var valid = ProfileActions.loadProfileFromString(this.refs.input.getValue());
+		if (!valid) {
 			this.setState({
 				valid: false
 			});

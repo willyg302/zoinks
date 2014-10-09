@@ -38,19 +38,14 @@ function addDive() {
 }
 
 function removeDive() {
+	if (_profile.dives.length === 1) {
+		return;
+	}
 	_profile.dives.pop();
 }
 
-function updateDiveTitle(id, title) {
-	_profile.dives[id].title = title;
-}
-
-function updateDiveDepth(id, depth) {
-	_profile.dives[id].depth = depth;
-}
-
-function updateDiveTime(id, time) {
-	_profile.dives[id].time = time;
+function updateDive(id, delta) {
+	_profile.dives[id] = merge(_profile.dives[id], delta);
 }
 
 function changeProfileUnits(units) {
@@ -88,14 +83,8 @@ AppDispatcher.register(function(payload) {
 		case Constants.DIVE_REMOVE:
 			removeDive();
 			break;
-		case Constants.DIVE_UPDATE_TITLE:
-			updateDiveTitle(action.id, action.title);
-			break;
-		case Constants.DIVE_UPDATE_DEPTH:
-			updateDiveDepth(action.id, action.depth);
-			break;
-		case Constants.DIVE_UPDATE_TIME:
-			updateDiveTime(action.id, action.time);
+		case Constants.DIVE_UPDATE:
+			updateDive(action.id, action.delta);
 			break;
 		case Constants.PROFILE_CHANGE_UNITS:
 			changeProfileUnits(action.units);

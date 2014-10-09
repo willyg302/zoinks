@@ -14,9 +14,21 @@ jest.dontMock('../../constants');
 jest.dontMock('../profile-store');
 
 describe('ProfileStore', function() {
-
 	var Constants = require('../../constants');
 
+	var mockAddDive = {
+		source: 'VIEW_ACTION',
+		action: {
+			actionType: Constants.DIVE_ADD
+		}
+	};
+
+	var mockRemoveDive = {
+		source: 'VIEW_ACTION',
+		action: {
+			actionType: Constants.DIVE_REMOVE
+		}
+	};
 
 	beforeEach(function() {
 		AppDispatcher = require('../../dispatcher/app-dispatcher');
@@ -34,44 +46,23 @@ describe('ProfileStore', function() {
 		expect(profile.dives.length).toEqual(1);
 	});
 
-
-	/*
-	// mock actions inside dispatch payloads
-	var actionTodoCreate = {
-		source: 'VIEW_ACTION',
-		action: {
-			actionType: TodoConstants.TODO_CREATE,
-			text: 'foo'
-		}
-	};
-	var actionTodoDestroy = {
-		source: 'VIEW_ACTION',
-		action: {
-			actionType: TodoConstants.TODO_DESTROY,
-			id: 'replace me in test'
-		}
-	};
-
-
-	it('creates a to-do item', function() {
-		callback(actionTodoCreate);
-		var all = TodoStore.getAll();
-		var keys = Object.keys(all);
-		expect(keys.length).toBe(1);
-		expect(all[keys[0]].text).toEqual('foo');
+	it('creates a dive', function() {
+		callback(mockAddDive);
+		var profile = ProfileStore.getProfile();
+		expect(profile.dives.length).toBe(2);
 	});
 
-	it('destroys a to-do item', function() {
-		callback(actionTodoCreate);
-		var all = TodoStore.getAll();
-		var keys = Object.keys(all);
-		expect(keys.length).toBe(1);
-		actionTodoDestroy.action.id = keys[0];
-		callback(actionTodoDestroy);
-		expect(all[keys[0]]).toBeUndefined();
+	it('removes a dive', function() {
+		callback(mockAddDive);
+		var profile = ProfileStore.getProfile();
+		expect(profile.dives.length).toBe(2);
+		callback(mockRemoveDive);
+		expect(profile.dives.length).toBe(1);
 	});
 
-	
-*/
-
+	it('does not remove the last dive', function() {
+		callback(mockRemoveDive);
+		var profile = ProfileStore.getProfile();
+		expect(profile.dives.length).toBe(1);
+	});
 });
