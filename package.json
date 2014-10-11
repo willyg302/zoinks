@@ -14,10 +14,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "flux": "~2.0.1",
     "react": "~0.11.2",
     "react-bootstrap": "~0.12.0",
-    "scuba-dive": "~0.1.1",
-    "flux": "~2.0.1"
+    "react-tools": "~0.11.2"
   },
   "devDependencies": {
     "gulp": "~3.8.8",
@@ -37,7 +37,11 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/jest-preprocessor.js",
-    "testPathDirs": ["<rootDir>/app/js"],
-    "unmockedModulePathPatterns": ["react"]
+    "testPathDirs": [
+      "<rootDir>/app/js"
+    ],
+    "unmockedModulePathPatterns": [
+      "react"
+    ]
   }
 }

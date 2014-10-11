@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 /**
  * Zoinks SCUBA Dive Planner Project for ICS 414.
  *
@@ -24,7 +26,8 @@ var Help = React.createClass({
 				<TabPane key={3} tab="About">
 					<p>
 						SCUBA Dive Planner Project for ICS 414, by William Gaul and Micah Ruth Angeles.
-						The source code for Zoinks can be found <a href="https://github.com/willyg302/zoinks">here</a>,
+						The source code for Zoinks can be found at
+						our <a href="https://github.com/willyg302/zoinks">GitHub repository</a>,
 						licensed under the MIT License.
 					</p>
 					<p>

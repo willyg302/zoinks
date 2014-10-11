@@ -38,7 +38,3 @@ Call `strap run cloc` to get LOC statistics for the project. Only `*.js` and `*.
 - **Functionality**: Code for implementing dive table calculations
 - **Interface**: Any code related to the UI
 - **Test**: Code residing in a `__tests__` directory
-
-## Credits
-
-- **[dive](https://github.com/nyxtom/dive)** by `@nyxtom`

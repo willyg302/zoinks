@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 /**
  * Zoinks SCUBA Dive Planner Project for ICS 414.
  *
