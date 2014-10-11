@@ -42,7 +42,7 @@ describe('ProfileStore', function() {
 
 	it('should initialize with default values', function() {
 		var profile = ProfileStore.getProfile();
-		expect(profile.units).toEqual('feet');
+		expect(profile.units).toEqual('meters');
 		expect(profile.dives.length).toEqual(1);
 	});
 

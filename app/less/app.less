@@ -1,8 +1,3 @@
-html {
-	min-height: 100%;
-	#gradient > .vertical(@start-color: @color-ocean-top; @end-color: @color-ocean-bottom);
-}
-
 body {
 	margin: 0;
 	background: none;
@@ -13,66 +8,82 @@ body {
 	right: 0;
 	position: absolute;
 	overflow: hidden;
-	padding: @row-padding;
 }
 
 .body {
 	top: 0;
-	bottom: @footer-height + 2 * @row-padding;
+	bottom: @footer-height;
 	overflow: auto;
 }
 
 .footer {
-	height: @footer-height + 2 * @row-padding;
+	height: @footer-height;
 	bottom: 0;
 	display: inline-flex;
+	padding: @layout-padding;
+	background-color: @color-footer-bg;
 
 	img {
-		height: @footer-height;
+		height: @layout-base;
 	}
 
 	#logo {
-		margin-right: @footer-height;
+		margin-right: @layout-base;
 	}
 }
 
 a.icon {
 	position: relative;
 	display: inline-block;
-	height: @footer-height;
-	margin-right: @row-padding;
-	margin-bottom: @row-padding;
+	height: @layout-base;
+	margin-right: @layout-padding;
+	margin-bottom: @layout-padding;
 	cursor: pointer;
+	float: left;
 
 	&:hover:after {
 		background-color: transparent;
 	}
 
 	&:after {
-		content: ''; 
-		position: absolute; 
-		top: 0; 
-		right: 0; 
-		bottom: 0; 
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
 		left: 0;
-
-		border-radius: @row-padding;
+		border-radius: @layout-padding;
 		background-color: @color-dive-box;
 		.transition(background-color 0.4s);
 	}
 
 	object {
-		height: 100%
+		height: 100%;
 	}
 }
 
 .profile {
 	white-space: nowrap;
+	padding: @layout-padding;
+	min-height: 100%;
+	min-width: 100%;
+	position: absolute;
+	#gradient > .vertical(@start-color: @color-sky-top; @end-color: @color-sky-bottom);
+}
+
+.ocean {
+	position: absolute;
+	#gradient > .vertical(@start-color: @color-ocean-top; @end-color: @color-ocean-bottom);
+	top: @sky-height;
+	bottom: 0;
+	left: 0;
+	right: 0;
 }
 
 .plusminus {
 	display: inline-block;
-	position: absolute;
+	position: relative;
+	vertical-align: top;
 }
 
 .dive {
@@ -80,13 +91,13 @@ a.icon {
 	height: @dive-box-height;
 	border: 5px dashed @color-dive-box;
 	border-radius: 20px;
-	padding: @row-padding;
+	padding: @layout-padding;
 	position: relative;
 	display: inline-block;
-	margin-right: @row-padding;
+	margin-right: @layout-padding;
 
 	h3 {
-		margin: 0px @row-padding;
+		margin: 0px @layout-padding;
 	}
 
 	input {
@@ -94,7 +105,7 @@ a.icon {
 		border: none;
 		width: 100%;
 		background: transparent;
-		color: white;
+		color: @color-black;
 	}
 }
 
@@ -103,7 +114,7 @@ a.icon {
 	color: @color-disclaimer;
 	font-size: 22px;
 	font-weight: bold;
-	margin-left: @footer-height;
+	margin-left: @layout-base;
 
 	@media screen and (max-width: @screen-break) {
 		display: none;

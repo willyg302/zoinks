@@ -31,6 +31,7 @@ var Profile = React.createClass({
 		}
 		return (
 			<div className="profile">
+				<div className="ocean"></div>
 				{dives}
 				<div className="plusminus">
 					<Icon name="plus" click={this._onAddDiveClick} position="left" desc="Add New Dive" />

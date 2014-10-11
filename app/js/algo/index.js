@@ -1,4 +1,3 @@
-var diveTable = require('./diveTable'); 
+var padi = require('./padi');
 
-diveTable.m(); 
-diveTable.get(); 
+module.exports = padi;

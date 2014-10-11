@@ -9,7 +9,7 @@
  */
 var AppDispatcher = require('../dispatcher/app-dispatcher');
 var Constants = require('../constants');
-var utils = require('../utils');
+var ProfileStore = require('../stores/profile-store');
 
 var ProfileActions = {
 	addDive: function() {
@@ -59,21 +59,7 @@ var ProfileActions = {
 	loadProfileFromString: function(s) {
 		try {
 			var json = JSON.parse(s);
-			var valid = utils.validate(json, {
-				units: function(e) {
-					return ['feet', 'meters'].indexOf(e) !== -1;
-				},
-				dives: [{
-					id: 'number',
-					title: 'string',
-					depth: function(e) {
-						return e >= 0;
-					},
-					time: function(e) {
-						return e >= 0;
-					}
-				}]
-			});
+			var valid = ProfileStore.validateProfile(json);
 			if (valid) {
 				this.loadProfile(json);
 			}

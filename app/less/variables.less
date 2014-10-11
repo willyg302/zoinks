@@ -3,14 +3,20 @@
 @font-size-base: 16px;
 
 // Layout
-@footer-height: 64px;
-@row-padding: 8px;
+@layout-base: 64px;
+@layout-padding: 8px;
+@footer-height: @layout-base + 2 * @layout-padding;
 @dive-box-width: 640px;
 @dive-box-height: 480px;
 @screen-break: 1160px;
+@sky-height: 2 * @layout-base + 3 * @layout-padding;
 
 // Colors
-@color-ocean-top:    #00d2ff;
-@color-ocean-bottom: #3a7bd5;
+@color-black:        #263238;
+@color-ocean-top:    #4fc3f7;
+@color-ocean-bottom: #01579b;
+@color-sky-top:      #4dd0e1;
+@color-sky-bottom:   #e0f7fa;
 @color-dive-box:     fade(#eceff1, 50%);
 @color-disclaimer:   #ffc107;
+@color-footer-bg:    @color-black;

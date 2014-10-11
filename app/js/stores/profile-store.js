@@ -12,19 +12,16 @@ var merge = require('react/lib/merge');
 
 var AppDispatcher = require('../dispatcher/app-dispatcher');
 var Constants = require('../constants');
+var utils = require('../utils');
+var algo = require('../algo');
 
 
 var CHANGE_EVENT = 'change';
 
-// Default profile on page load
+// Default profile on page load (minus a dive we will push on startup)
 var _profile = {
-	units: 'feet',
-	dives: [{
-		id: 0,
-		title: 'My Dive',
-		depth: 50,
-		time: 3
-	}]
+	units: 'meters',
+	dives: []
 };
 
 
@@ -32,8 +29,8 @@ function addDive() {
 	_profile.dives.push({
 		id: _profile.dives.length,
 		title: 'New Dive',
-		depth: 50,
-		time: 3
+		depth: algo.DEFAULT_DEPTH,
+		time: algo.DEFAULT_TIME
 	});
 }
 
@@ -56,6 +53,33 @@ function loadProfile(profile) {
 	_profile = profile;
 }
 
+function validateProfile(profile) {
+	var valid = utils.validate(profile, {
+		units: function(e) {
+			return ['feet', 'meters'].indexOf(e) !== -1;
+		},
+		dives: [{
+			id: 'number',
+			title: 'string',
+			depth: function(e) {
+				return e >= algo.MIN_DEPTH && e <= algo.MAX_DEPTH;
+			},
+			time: function(e) {
+				return e >= algo.MIN_TIME && e <= algo.MAX_TIME;
+			}
+		}]
+	});
+	if (!valid) {
+		return false;
+	}
+	for (var i = 0; i < profile.dives.length; i++) {
+		if (profile.dives[i].id !== i) {
+			return false;
+		}
+	}
+	return true;
+}
+
 
 var ProfileStore = merge(EventEmitter.prototype, {
 	getProfile: function() {
@@ -69,7 +93,8 @@ var ProfileStore = merge(EventEmitter.prototype, {
 	},
 	removeChangeListener: function(callback) {
 		this.removeListener(CHANGE_EVENT, callback);
-	}
+	},
+	validateProfile: validateProfile
 });
 
 // Register to handle all updates from the dispatcher
@@ -101,5 +126,8 @@ AppDispatcher.register(function(payload) {
 
 	return true;
 });
+
+// Add a single dive to start with
+addDive();
 
 module.exports = ProfileStore;
