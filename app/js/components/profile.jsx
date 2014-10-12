@@ -23,7 +23,7 @@ var Profile = React.createClass({
 
 	render: function() {
 		var dives = this.state.dives.map(function(value, index) {
-			return <Dive key={index} id={value.id} title={value.title} />;
+			return <Dive key={index} id={value.id} title={value.title} depth={value.depth} time={value.time} />;
 		});
 		var minus;
 		if (this.state.dives.length > 1) {
@@ -31,7 +31,6 @@ var Profile = React.createClass({
 		}
 		return (
 			<div className="profile">
-				<div className="ocean"></div>
 				{dives}
 				<div className="plusminus">
 					<Icon name="plus" click={this._onAddDiveClick} position="left" desc="Add New Dive" />

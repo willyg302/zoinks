@@ -68,16 +68,7 @@ a.icon {
 	min-height: 100%;
 	min-width: 100%;
 	position: absolute;
-	#gradient > .vertical(@start-color: @color-sky-top; @end-color: @color-sky-bottom);
-}
-
-.ocean {
-	position: absolute;
-	#gradient > .vertical(@start-color: @color-ocean-top; @end-color: @color-ocean-bottom);
-	top: @sky-height;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	.double-gradient(@color-sky-top, @color-sky-bottom, @color-ocean-top, @color-ocean-bottom, @sky-height);
 }
 
 .plusminus {
@@ -87,25 +78,30 @@ a.icon {
 }
 
 .dive {
-	width: @dive-box-width;
-	height: @dive-box-height;
 	border: 5px dashed @color-dive-box;
 	border-radius: 20px;
 	padding: @layout-padding;
 	position: relative;
 	display: inline-block;
 	margin-right: @layout-padding;
-
-	h3 {
-		margin: 0px @layout-padding;
-	}
+	vertical-align: top;
 
 	input {
 		outline: none;
 		border: none;
-		width: 100%;
 		background: transparent;
 		color: @color-black;
+		.box-shadow(none);
+	}
+
+	svg.line {
+		margin-top: 48px;
+	}
+
+	img.boat {
+		width: @layout-base;
+		position: absolute;
+		top: 82px;
 	}
 }
 

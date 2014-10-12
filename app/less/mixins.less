@@ -1,0 +1,8 @@
+// A gradient composed of two gradients split at a color stop
+.double-gradient(@start-color-a: #00b3ee; @end-color-a: #7a43b6; @start-color-b: #7a43b6; @end-color-b: #c3325f; @color-stop: 50%) {
+	background-image: -webkit-linear-gradient(top, @start-color-a, @end-color-a @color-stop, @start-color-b @color-stop, @end-color-b);
+	background-image: -o-linear-gradient(top, @start-color-a, @end-color-a @color-stop, @start-color-b @color-stop, @end-color-b);
+	background-image: linear-gradient(to bottom, @start-color-a, @end-color-a @color-stop, @start-color-b @color-stop, @end-color-b);
+	background-repeat: no-repeat;
+	filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@start-color-a),argb(@end-color-b))); // IE9 and down, gets no color-stop at all for proper fallback
+}
