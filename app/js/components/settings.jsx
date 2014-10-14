@@ -46,7 +46,6 @@ var Settings = React.createClass({
 	},
 	_onClickSave: function() {
 		ProfileActions.changeProfileUnits(this.state.units);
-		return true;
 	},
 	_onOpen: function() {
 		this.setState(this.getInitialState());

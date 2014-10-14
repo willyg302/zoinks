@@ -48,7 +48,7 @@ var Import = React.createClass({
 				valid: false
 			});
 		}
-		return valid;
+		return !valid;
 	},
 	_onOpen: function() {
 		this.refs.input.getDOMNode().value = '';

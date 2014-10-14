@@ -12,22 +12,25 @@
 var React = require('react');
 
 var ProfileActions = require('../actions/profile-actions');
+var algo = require('../algo');
+
+var Draggable = require('./draggable.jsx');
 
 var Dive = React.createClass({
 	render: function() {
-		var x = this.props.time;
-		var y = this.props.depth;
-		var bt = (10 * x) + (y / 2);
-		var w = bt + y + 94;
-		var h = 10 * y + 64;
+		var t = this.props.time;
+		var d = this.props.depth;
+		var bt = (10 * t) + (d / 2);
+		var w = bt + d + 94;
+		var h = 10 * d + 64;
 		var points = "0,0 {e},{f} {g},{f} {h},50 {i},50 {j},0";
 		var replacements = {
-			'{e}': y / 2,
-			'{f}': 10 * y,
+			'{e}': d / 2,
+			'{f}': 10 * d,
 			'{g}': bt,
-			'{h}': bt + y - 5,
-			'{i}': bt + y + 25,
-			'{j}': bt + y + 30
+			'{h}': bt + d - 5,
+			'{i}': bt + d + 25,
+			'{j}': bt + d + 30
 		};
 		for (var k in replacements) {
 			if (replacements.hasOwnProperty(k)) {
@@ -43,16 +46,38 @@ var Dive = React.createClass({
 		return (
 			<div className="dive">
 				<input className="form-control input-lg" onChange={this._onEditTitle} value={this.props.title} maxLength="140" />
-				<img className="boat" src="img/boat.svg" style={{left: '8px'}} />
-				<img className="boat" src="img/boat.svg" style={{left: (w - 56) + "px"}} />
-				<svg className="line" xmlns="http://www.w3.org/2000/svg" width={w} height={h}>
-					<polyline style={style} transform="translate(32,32)" points={points} />
-				</svg>
+				<div className="diagram">
+					<img className="boat" src="img/boat.svg" />
+					<img className="boat" src="img/boat.svg" style={{left: (w - 64) + "px"}} />
+					<Draggable start={{x: bt, y: 10 * d}}
+					           validateDrag={this._validateDrag} onDrag={this._onDrag}>
+						<img className="diver" src="img/good.svg" />
+					</Draggable>
+					<svg xmlns="http://www.w3.org/2000/svg" width={w} height={h}>
+						<polyline style={style} transform="translate(32,32)" points={points} />
+					</svg>
+				</div>
 			</div>
 		);
 	},
 	_onEditTitle: function(e) {
 		ProfileActions.updateDiveTitle(this.props.id, e.target.value);
+	},
+	_validateDrag: function(x, y) {
+		var newDepth = y / 10;
+		var newTime = (x - newDepth / 2) / 10;
+		return [
+			(newTime >= algo.MIN_TIME && newTime <= algo.MAX_TIME),
+			(newDepth >= algo.MIN_DEPTH && newDepth <= algo.MAX_DEPTH)
+		];
+	},
+	_onDrag: function(x, y) {
+		var newDepth = y / 10;
+		var newTime = (x - newDepth / 2) / 10;
+		ProfileActions.updateDive(this.props.id, {
+			depth: Math.round(newDepth),
+			time: Math.round(newTime)
+		});
 	}
 });
 

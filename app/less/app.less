@@ -94,14 +94,18 @@ a.icon {
 		.box-shadow(none);
 	}
 
-	svg.line {
+	.diagram {
+		position: relative;
 		margin-top: 48px;
 	}
 
-	img.boat {
+	img.diver {
 		width: @layout-base;
 		position: absolute;
-		top: 82px;
+	}
+
+	img.boat:extend(.dive img.diver) {
+		top: -20px;
 	}
 }
 
@@ -120,4 +124,12 @@ a.icon {
 .nav.nav-tabs {
 	height: 44px;
 	margin-bottom: 15px;
+}
+
+.draggable {
+	position: absolute;
+	.user-select(none);
+	-webkit-user-drag: none;
+	user-drag: none;
+	cursor: move;
 }

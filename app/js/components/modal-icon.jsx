@@ -10,6 +10,7 @@
  * @license MIT
  */
 var React = require('react');
+var emptyFunction = require('react/lib/emptyFunction');
 
 var Button = require('react-bootstrap/Button');
 var Modal = require('react-bootstrap/Modal');
@@ -20,6 +21,15 @@ var Icon = require('./icon.jsx');
 var ModalIcon = React.createClass({
 	mixins: [OverlayMixin],
 
+	getDefaultProps: function() {
+		return {
+			position: 'top',
+			onOpen: emptyFunction,
+			onClose: emptyFunction,
+			onClickCancel: emptyFunction,
+			onClickPrimary: emptyFunction
+		};
+	},
 	getInitialState: function() {
 		return {
 			isModalOpen: false
@@ -54,31 +64,23 @@ var ModalIcon = React.createClass({
 		this.setState({
 			isModalOpen: true
 		}, function() {
-			if (typeof this.props.onOpen === 'function') {
-				this.props.onOpen();
-			}
+			this.props.onOpen();
 		});
 	},
 	_onCloseModal: function() {
 		this.setState({
 			isModalOpen: false
 		}, function() {
-			if (typeof this.props.onClose === 'function') {
-				this.props.onClose();
-			}
+			this.props.onClose();
 		});
 	},
 	_onClickCancel: function() {
-		if (typeof this.props.onClickCancel === 'function') {
-			this.props.onClickCancel();
-		}
+		this.props.onClickCancel();
 		this._onCloseModal();
 	},
 	_onClickPrimary: function() {
-		if (typeof this.props.onClickPrimary === 'function') {
-			if (!this.props.onClickPrimary()) {
-				return;
-			}
+		if (this.props.onClickPrimary()) {
+			return;
 		}
 		this._onCloseModal();
 	}
