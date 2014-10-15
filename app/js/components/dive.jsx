@@ -17,6 +17,12 @@ var algo = require('../algo');
 var Draggable = require('./draggable.jsx');
 
 var Dive = React.createClass({
+	getInitialState: function() {
+		return {
+			depthStyle: 'success',
+			timeStyle: 'success'
+		};
+	},
 	render: function() {
 		var t = this.props.time;
 		var d = this.props.depth;
@@ -39,7 +45,7 @@ var Dive = React.createClass({
 		}
 		var style = {
 			fill: 'none',
-			stroke: 'red',
+			stroke: 'red',  // good: #259b24, warning: , bad: #e51c23
 			strokeWidth: '5px',
 			strokeLinejoin: 'round'
 		};
@@ -62,6 +68,12 @@ var Dive = React.createClass({
 	},
 	_onEditTitle: function(e) {
 		ProfileActions.updateDiveTitle(this.props.id, e.target.value);
+	},
+	_onEditDepth: function(e) {
+		ProfileActions.updateDiveDepth(this.props.id, this.refs.depth.getValue());
+	},
+	_onEditTime: function(e) {
+		ProfileActions.updateDiveTime(this.props.id, this.refs.time.getValue());
 	},
 	_validateDrag: function(x, y) {
 		var newDepth = y / 10;

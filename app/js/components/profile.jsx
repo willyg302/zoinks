@@ -22,9 +22,9 @@ var Profile = React.createClass({
 	mixins: [WatchProfileMixin],
 
 	render: function() {
-		var dives = this.state.dives.map(function(value, index) {
-			return <Dive key={index} id={value.id} title={value.title} depth={value.depth} time={value.time} />;
-		});
+		var dives = this.state.dives.map(function(e, i) {
+			return <Dive key={i} id={e.id} units={this.state.units} title={e.title} depth={e.depth} time={e.time} />;
+		}, this);
 		var minus;
 		if (this.state.dives.length > 1) {
 			minus = <Icon name="minus" click={this._onRemoveDiveClick} position="left" desc="Remove Last Dive" />;
