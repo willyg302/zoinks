@@ -107,6 +107,29 @@ a.icon {
 	img.boat:extend(.dive img.diver) {
 		top: -20px;
 	}
+
+	.diver-tooltip {
+		font-size: @font-size-large;
+		text-align: left;
+	}
+}
+
+.plane {
+	position: relative;
+	display: inline-block;
+	margin-right: @layout-padding;
+
+	img {
+		width: 2 * @layout-base;
+	}
+
+	& > span {
+		position: absolute;
+		left: 0;
+		font-size: @font-size-h2;
+		font-weight: bold;
+		color: @color-plane;
+	}
 }
 
 .disclaimer {

@@ -9,6 +9,21 @@
  */
 var utils = {};
 
+utils.toFeet = function(meters) {
+	return meters * 3.28084;
+};
+
+utils.toMeters = function(feet) {
+	return feet * 0.3048;
+};
+
+utils.convertUnits = function(v, from, to) {
+	if (from === to) {
+		return v;
+	}
+	return (to === 'meters' ? this.toMeters(v) : this.toFeet(v));
+};
+
 utils.validate = function self(actual, expected) {
 	if (expected instanceof Array) {
 		if (!(actual instanceof Array)) {

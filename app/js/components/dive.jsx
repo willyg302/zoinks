@@ -11,8 +11,11 @@
  */
 var React = require('react');
 
+var Tooltip = require('react-bootstrap/Tooltip');
+
 var ProfileActions = require('../actions/profile-actions');
 var algo = require('../algo');
+var utils = require('../utils');
 
 var Draggable = require('./draggable.jsx');
 
@@ -43,22 +46,33 @@ var Dive = React.createClass({
 				points = points.replace(new RegExp(k, 'g'), replacements[k]);
 			}
 		}
+		var status = algo.getStatus(this.props);
+		var statusColor = (status === algo.status.BAD ? '#e51c23' : (status === algo.status.WARNING ? '#ffc107' : '#259b24'));
+		var statusImg = (status === algo.status.BAD ? 'bad' : (status === algo.status.WARNING ? 'warning' : 'good'));
 		var style = {
 			fill: 'none',
-			stroke: 'red',  // good: #259b24, warning: , bad: #e51c23
+			stroke: statusColor,
 			strokeWidth: '5px',
 			strokeLinejoin: 'round'
 		};
+		var depthValue = utils.convertUnits(this.props.depth, 'meters', this.props.units).toFixed(1);
+		var depthString = (this.props.units === 'meters' ? 'm' : 'ft');
 		return (
 			<div className="dive">
 				<input className="form-control input-lg" onChange={this._onEditTitle} value={this.props.title} maxLength="140" />
 				<div className="diagram">
 					<img className="boat" src="img/boat.svg" />
 					<img className="boat" src="img/boat.svg" style={{left: (w - 64) + "px"}} />
-					<Draggable start={{x: bt, y: 10 * d}}
-					           validateDrag={this._validateDrag} onDrag={this._onDrag}>
-						<img className="diver" src="img/good.svg" />
+					<Draggable start={{x: bt, y: 10 * d}} validateDrag={this._validateDrag} onDrag={this._onDrag}>
+						<img className="diver" src={"img/" + statusImg + ".svg"} />
 					</Draggable>
+					<Tooltip className="diver-tooltip" positionLeft={bt + 64} positionTop={10 * d}>
+						{depthValue} {depthString}<br />
+						{this.props.time.toFixed(1)} min
+					</Tooltip>
+					<Tooltip positionLeft={bt + d + 55} positionTop={69}>
+						{utils.convertUnits(5, 'meters', this.props.units).toFixed(0)} {depthString}, 3 min
+					</Tooltip>
 					<svg xmlns="http://www.w3.org/2000/svg" width={w} height={h}>
 						<polyline style={style} transform="translate(32,32)" points={points} />
 					</svg>
@@ -87,8 +101,8 @@ var Dive = React.createClass({
 		var newDepth = y / 10;
 		var newTime = (x - newDepth / 2) / 10;
 		ProfileActions.updateDive(this.props.id, {
-			depth: Math.round(newDepth),
-			time: Math.round(newTime)
+			depth: newDepth,
+			time: newTime
 		});
 	}
 });

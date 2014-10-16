@@ -12,26 +12,6 @@
 var React = require('react/addons');
 var emptyFunction = require('react/lib/emptyFunction');
 
-function isFunction(fn) {
-	return typeof fn === 'function';
-}
-
-function matchesSelector(el, selector) {
-	if (isFunction(el.matches)) {
-		return el.matches(selector);
-	} else if (isFunction(el.webkitMatchesSelector)) {
-		return el.webkitMatchesSelector(selector);
-	} else if (isFunction(el.mozMatchesSelector)) {
-		return el.mozMatchesSelector(selector);
-	} else if (isFunction(el.msMatchesSelector)) {
-		return el.msMatchesSelector(selector);
-	} else if (isFunction(el.oMatchesSelector)) {
-		return el.oMatchesSelector(selector);
-	} else if (isFunction(el.webkitMatchesSelector)) {
-		return el.webkitMatchesSelector(selector);
-	}
-}
-
 var Draggable = React.createClass({
 	componentWillUnmount: function() {
 		// Remove any leftover event handlers
@@ -41,8 +21,6 @@ var Draggable = React.createClass({
 
 	getDefaultProps: function() {
 		return {
-			handle: null,
-			grid: null,
 			start: {
 				x: 0,
 				y: 0
@@ -80,10 +58,6 @@ var Draggable = React.createClass({
 	_onMouseDown: function(e) {
 		var node = this.getDOMNode();
 
-		// Short circuit if handle was provided and selector doesn't match
-		if (this.props.handle && !matchesSelector(e.target, this.props.handle)) {
-			return;
-		}
 		this.setState({
 			dragging: true,
 			offsetX: e.clientX,
@@ -111,12 +85,6 @@ var Draggable = React.createClass({
 	_onMouseMove: function(e) {
 		var newX = this.state.startX + e.clientX - this.state.offsetX;
 		var newY = this.state.startY + e.clientY - this.state.offsetY;
-
-		// Optionally snap to grid
-		if (Array.isArray(this.props.grid)) {
-			newX = Math.abs(newX - this.state.clientX) >= this.props.grid[0] ? newX : this.state.clientX;
-			newY = Math.abs(newY - this.state.clientY) >= this.props.grid[1] ? newY : this.state.clientY;
-		}
 
 		// Callback to validate the drag
 		var validated = this.props.validateDrag(newX, newY);

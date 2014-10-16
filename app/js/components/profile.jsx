@@ -13,6 +13,7 @@ var React = require('react');
 
 var Constants = require('../constants');
 var ProfileActions = require('../actions/profile-actions');
+var algo = require('../algo');
 
 var Dive = require('./dive.jsx');
 var Icon = require('./icon.jsx');
@@ -32,6 +33,10 @@ var Profile = React.createClass({
 		return (
 			<div className="profile">
 				{dives}
+				<div className="plane">
+					<img src="img/plane.svg" />
+					<span>{algo.getTimeToFly()} hr</span>
+				</div>
 				<div className="plusminus">
 					<Icon name="plus" click={this._onAddDiveClick} position="left" desc="Add New Dive" />
 					<br />
