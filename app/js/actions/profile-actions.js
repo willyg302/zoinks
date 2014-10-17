@@ -29,6 +29,13 @@ var ProfileActions = {
 			delta: delta
 		});
 	},
+	updateSurfaceInterval: function(id, time) {
+		AppDispatcher.handleViewAction({
+			actionType: Constants.SURFACE_INTERVAL_UPDATE,
+			id: id,
+			time: time
+		});
+	},
 	changeProfileUnits: function(units) {
 		AppDispatcher.handleViewAction({
 			actionType: Constants.PROFILE_CHANGE_UNITS,

@@ -13,6 +13,7 @@ module.exports = keyMirror({
 	DIVE_ADD: null,
 	DIVE_REMOVE: null,
 	DIVE_UPDATE: null,
+	SURFACE_INTERVAL_UPDATE: null,
 	PROFILE_CHANGE_UNITS: null,
 	PROFILE_LOAD: null
 });

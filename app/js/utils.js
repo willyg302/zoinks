@@ -24,6 +24,15 @@ utils.convertUnits = function(v, from, to) {
 	return (to === 'meters' ? this.toMeters(v) : this.toFeet(v));
 };
 
+utils.getTimeString = function(min) {
+	var h = Math.floor(min / 60);
+	var m = min % 60;
+	return [
+		h === 0 ? '' : (h + " hr"),
+		(m === 0 && h !== 0) ? '' : (m + " min")
+	].join(' ').trim();
+};
+
 utils.validate = function self(actual, expected) {
 	if (expected instanceof Array) {
 		if (!(actual instanceof Array)) {

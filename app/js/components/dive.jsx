@@ -47,7 +47,7 @@ var Dive = React.createClass({
 			}
 		}
 		var status = algo.getStatus(this.props);
-		var statusColor = (status === algo.status.BAD ? '#e51c23' : (status === algo.status.WARNING ? '#ffc107' : '#259b24'));
+		var statusColor = (status === algo.status.BAD ? '#ff5177' : (status === algo.status.WARNING ? '#ffd740' : '#5af158'));
 		var statusImg = (status === algo.status.BAD ? 'bad' : (status === algo.status.WARNING ? 'warning' : 'good'));
 		var style = {
 			fill: 'none',
@@ -58,7 +58,7 @@ var Dive = React.createClass({
 		var depthValue = utils.convertUnits(this.props.depth, 'meters', this.props.units).toFixed(1);
 		var depthString = (this.props.units === 'meters' ? 'm' : 'ft');
 		return (
-			<div className="dive">
+			<div className="dive" style={{width: (w + 16) + "px"}}>
 				<input className="form-control input-lg" onChange={this._onEditTitle} value={this.props.title} maxLength="140" />
 				<div className="diagram">
 					<img className="boat" src="img/boat.svg" />

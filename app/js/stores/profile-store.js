@@ -21,11 +21,19 @@ var CHANGE_EVENT = 'change';
 // Default profile on page load (minus a dive we will push on startup)
 var _profile = {
 	units: 'meters',
-	dives: []
+	dives: [],
+	surfaceIntervals: []
 };
 
 
 function addDive() {
+	// If this isn't the initialization, also add a surface interval
+	if (_profile.dives.length !== 0) {
+		_profile.surfaceIntervals.push({
+			id: _profile.surfaceIntervals.length,
+			time: algo.DEFAULT_SURFACE_INTERVAL
+		});
+	}
 	_profile.dives.push({
 		id: _profile.dives.length,
 		title: 'New Dive',
@@ -39,10 +47,15 @@ function removeDive() {
 		return;
 	}
 	_profile.dives.pop();
+	_profile.surfaceIntervals.pop();
 }
 
 function updateDive(id, delta) {
 	_profile.dives[id] = merge(_profile.dives[id], delta);
+}
+
+function updateSurfaceInterval(id, time) {
+	_profile.surfaceIntervals[id].time = time;
 }
 
 function changeProfileUnits(units) {
@@ -67,13 +80,24 @@ function validateProfile(profile) {
 			time: function(e) {
 				return e >= algo.MIN_TIME && e <= algo.MAX_TIME;
 			}
+		}],
+		surfaceIntervals: [{
+			time: function(e) {
+				return e >= algo.MIN_SURFACE_INTERVAL && e <= algo.MAX_SURFACE_INTERVAL;
+			}
 		}]
 	});
 	if (!valid) {
 		return false;
 	}
-	for (var i = 0; i < profile.dives.length; i++) {
+	var i;
+	for (i = 0; i < profile.dives.length; i++) {
 		if (profile.dives[i].id !== i) {
+			return false;
+		}
+	}
+	for (i = 0; i < profile.surfaceIntervals.length; i++) {
+		if (profile.surfaceIntervals[i].id !== i) {
 			return false;
 		}
 	}
@@ -110,6 +134,9 @@ AppDispatcher.register(function(payload) {
 			break;
 		case Constants.DIVE_UPDATE:
 			updateDive(action.id, action.delta);
+			break;
+		case Constants.SURFACE_INTERVAL_UPDATE:
+			updateSurfaceInterval(action.id, action.time);
 			break;
 		case Constants.PROFILE_CHANGE_UNITS:
 			changeProfileUnits(action.units);

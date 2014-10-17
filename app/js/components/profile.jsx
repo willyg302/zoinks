@@ -17,14 +17,26 @@ var algo = require('../algo');
 
 var Dive = require('./dive.jsx');
 var Icon = require('./icon.jsx');
+var SurfaceInterval = require('./surface-interval.jsx');
 var WatchProfileMixin = require('./watch-profile-mixin');
 
 var Profile = React.createClass({
 	mixins: [WatchProfileMixin],
 
 	render: function() {
-		var dives = this.state.dives.map(function(e, i) {
-			return <Dive key={i} id={e.id} units={this.state.units} title={e.title} depth={e.depth} time={e.time} />;
+		var zipped = [];
+		for (var i = 0; i < this.state.dives.length; i++) {
+			zipped.push(this.state.dives[i]);
+			if (i < this.state.surfaceIntervals.length) {
+				zipped.push(this.state.surfaceIntervals[i]);
+			}
+		}
+		var elems = zipped.map(function(e, i) {
+			if (i % 2 === 0) {
+				return <Dive key={i} id={e.id} units={this.state.units} title={e.title} depth={e.depth} time={e.time} />;
+			} else {
+				return <SurfaceInterval key={i} id={e.id} time={e.time} />;
+			}
 		}, this);
 		var minus;
 		if (this.state.dives.length > 1) {
@@ -32,7 +44,7 @@ var Profile = React.createClass({
 		}
 		return (
 			<div className="profile">
-				{dives}
+				{elems}
 				<div className="plane">
 					<img src="img/plane.svg" />
 					<span>{algo.getTimeToFly()} hr</span>

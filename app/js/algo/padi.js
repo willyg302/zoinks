@@ -17,6 +17,10 @@ padi.MIN_TIME = 0;
 padi.MAX_TIME = 220;
 padi.DEFAULT_TIME = 20;
 
+padi.MIN_SURFACE_INTERVAL = 0;
+padi.MAX_SURFACE_INTERVAL = 360;
+padi.DEFAULT_SURFACE_INTERVAL = 60;
+
 padi.getTimeToFly = function() {
 	// @TODO - this should take an argument which is the entire profile...?
 	return 18;
