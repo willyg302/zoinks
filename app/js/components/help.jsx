@@ -21,9 +21,26 @@ var Help = React.createClass({
 		var modalBody = (
 			// @TODO
 			<TabbedArea defaultActiveKey={1}>
-				<TabPane key={1} tab="The Basics">This is the basics tab.</TabPane>
-				<TabPane key={2} tab="Calculations">Info about algorithms and stuff.</TabPane>
-				<TabPane key={3} tab="About">
+				<TabPane key={1} tab="The Basics">
+					<div className="help-basic">
+						<img src="img/good.svg" />
+						<h3>Good</h3>
+						It is safe to dive.
+					</div>
+					<div className="help-basic">
+						<img src="img/warning.svg" />
+						<h3>Warning</h3>
+						You are approaching the safety limits, but it is still safe to dive.
+					</div>
+					<div className="help-basic">
+						<img src="img/bad.svg" />
+						<h3>Bad</h3>
+						Plan exceeds the safety limits. <strong>Do not dive!</strong>
+					</div>
+				</TabPane>
+				<TabPane key={2} tab="Dive Profile">This is the dive profile tab.</TabPane>
+				<TabPane key={3} tab="Calculations">Info about algorithms and stuff.</TabPane>
+				<TabPane key={4} tab="About">
 					<p>
 						SCUBA Dive Planner Project for ICS 414, by William Gaul and Micah Ruth Angeles.
 						The source code for Zoinks can be found at
