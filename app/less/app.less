@@ -53,7 +53,7 @@ a.icon {
 		bottom: 0;
 		left: 0;
 		border-radius: @layout-padding;
-		background-color: @color-dive-box;
+		background-color: @color-icon-overlay;
 		.transition(background-color 0.4s);
 	}
 
@@ -110,6 +110,24 @@ a.icon {
 		font-size: @font-size-large;
 		text-align: left;
 	}
+
+	.dive-line {
+		fill: none;
+		stroke-width: @dive-line-width;
+		stroke-line-join: round;
+	}
+}
+
+.good {
+	stroke: @color-good;
+}
+
+.warning {
+	stroke: @color-warning;
+}
+
+.bad {
+	stroke: @color-bad;
 }
 
 .surface-interval {
@@ -126,6 +144,14 @@ a.icon {
 
 	button, input {
 		margin-right: @layout-padding;
+	}
+
+	.display {
+		display: block;
+		text-align: center;
+		cursor: pointer;
+		font-size: @font-size-h3;
+		border-bottom: @dive-line-width solid @color-black;
 	}
 }
 

@@ -47,14 +47,7 @@ var Dive = React.createClass({
 			}
 		}
 		var status = algo.getStatus(this.props);
-		var statusColor = (status === algo.status.BAD ? '#ff5177' : (status === algo.status.WARNING ? '#ffd740' : '#5af158'));
-		var statusImg = (status === algo.status.BAD ? 'bad' : (status === algo.status.WARNING ? 'warning' : 'good'));
-		var style = {
-			fill: 'none',
-			stroke: statusColor,
-			strokeWidth: '5px',
-			strokeLinejoin: 'round'
-		};
+		var statusClass = (status === algo.status.BAD ? 'bad' : (status === algo.status.WARNING ? 'warning' : 'good'));
 		var depthValue = utils.convertUnits(this.props.depth, 'meters', this.props.units).toFixed(1);
 		var depthString = (this.props.units === 'meters' ? 'm' : 'ft');
 		return (
@@ -64,7 +57,7 @@ var Dive = React.createClass({
 					<img className="boat" src="img/boat.svg" />
 					<img className="boat" src="img/boat.svg" style={{left: (w - 64) + "px"}} />
 					<Draggable start={{x: bt, y: 10 * d}} validateDrag={this._validateDrag} onDrag={this._onDrag}>
-						<img className="diver" src={"img/" + statusImg + ".svg"} />
+						<img className="diver" src={"img/" + statusClass + ".svg"} />
 					</Draggable>
 					<Tooltip className="diver-tooltip" positionLeft={bt + 64} positionTop={10 * d}>
 						{depthValue} {depthString}<br />
@@ -74,7 +67,7 @@ var Dive = React.createClass({
 						{utils.convertUnits(5, 'meters', this.props.units).toFixed(0)} {depthString}, 3 min
 					</Tooltip>
 					<svg xmlns="http://www.w3.org/2000/svg" width={w} height={h}>
-						<polyline style={style} transform="translate(32,32)" points={points} />
+						<polyline className={"dive-line " + statusClass} transform="translate(32,32)" points={points} />
 					</svg>
 				</div>
 			</div>

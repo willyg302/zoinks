@@ -49,7 +49,7 @@ var SurfaceInterval = React.createClass({
 				</form>
 			);
 		} else {
-			elem = <span onClick={this._onClickToEdit}>{utils.getTimeString(this.props.time)}</span>;
+			elem = <span className="display" onClick={this._onClickToEdit}>{utils.getTimeString(this.props.time)}</span>;
 		}
 		return (
 			<div className="surface-interval">
