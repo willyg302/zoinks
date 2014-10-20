@@ -33,9 +33,9 @@ var Profile = React.createClass({
 		}
 		var elems = zipped.map(function(e, i) {
 			if (i % 2 === 0) {
-				return <Dive key={i} id={e.id} units={this.state.units} title={e.title} depth={e.depth} time={e.time} />;
+				return <Dive key={i} id={i / 2} units={this.state.units} title={e.title} depth={e.depth} time={e.time} />;
 			} else {
-				return <SurfaceInterval key={i} id={e.id} time={e.time} />;
+				return <SurfaceInterval key={i} id={(i - 1) / 2} time={e.time} />;
 			}
 		}, this);
 		var minus;

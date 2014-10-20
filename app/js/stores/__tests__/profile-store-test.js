@@ -16,19 +16,45 @@ jest.dontMock('../profile-store');
 describe('ProfileStore', function() {
 	var Constants = require('../../constants');
 
-	var mockAddDive = {
-		source: 'VIEW_ACTION',
-		action: {
-			actionType: Constants.DIVE_ADD
-		}
+	var mockViewAction = function(a) {
+		return {
+			source: 'VIEW_ACTION',
+			action: a
+		};
 	};
 
-	var mockRemoveDive = {
-		source: 'VIEW_ACTION',
-		action: {
-			actionType: Constants.DIVE_REMOVE
+	var mockAddDive = mockViewAction({
+		actionType: Constants.DIVE_ADD
+	});
+
+	var mockRemoveDive = mockViewAction({
+		actionType: Constants.DIVE_REMOVE
+	});
+
+	var mockUpdateDive = mockViewAction({
+		actionType: Constants.DIVE_UPDATE,
+		id: 0,
+		delta: {
+			title: 'Djibouti',
+			depth: 9001
 		}
-	};
+	});
+
+	var mockUpdateSurfaceInterval = mockViewAction({
+		actionType: Constants.SURFACE_INTERVAL_UPDATE,
+		id: 0,
+		time: 1
+	});
+
+	var mockChangeProfileUnits = mockViewAction({
+		actionType: Constants.PROFILE_CHANGE_UNITS,
+		units: 'feet'
+	});
+
+	var mockLoadProfile = mockViewAction({
+		actionType: Constants.PROFILE_LOAD,
+		profile: {i: 'like pie'}
+	});
 
 	beforeEach(function() {
 		AppDispatcher = require('../../dispatcher/app-dispatcher');
@@ -43,16 +69,10 @@ describe('ProfileStore', function() {
 	it('should initialize with default values', function() {
 		var profile = ProfileStore.getProfile();
 		expect(profile.units).toEqual('meters');
-		expect(profile.dives.length).toEqual(1);
+		expect(profile.dives.length).toBe(1);
 	});
 
-	it('creates a dive', function() {
-		callback(mockAddDive);
-		var profile = ProfileStore.getProfile();
-		expect(profile.dives.length).toBe(2);
-	});
-
-	it('removes a dive', function() {
+	it('creates and removes a dive', function() {
 		callback(mockAddDive);
 		var profile = ProfileStore.getProfile();
 		expect(profile.dives.length).toBe(2);
@@ -64,5 +84,31 @@ describe('ProfileStore', function() {
 		callback(mockRemoveDive);
 		var profile = ProfileStore.getProfile();
 		expect(profile.dives.length).toBe(1);
+	});
+
+	it('updates a dive', function() {
+		callback(mockUpdateDive);
+		var dive = ProfileStore.getProfile().dives[0];
+		expect(dive.title).toEqual('Djibouti');
+		expect(dive.depth).toEqual(9001);
+	});
+
+	it('updates a surface interval', function() {
+		callback(mockAddDive);
+		callback(mockUpdateSurfaceInterval);
+		var surfaceInterval = ProfileStore.getProfile().surfaceIntervals[0];
+		expect(surfaceInterval.time).toEqual(1);
+	});
+
+	it('changes the profile units', function() {
+		callback(mockChangeProfileUnits);
+		var profile = ProfileStore.getProfile();
+		expect(profile.units).toEqual('feet');
+	});
+
+	it('loads a profile', function() {
+		callback(mockLoadProfile);
+		var profile = ProfileStore.getProfile();
+		expect(profile.i).toEqual('like pie');
 	});
 });

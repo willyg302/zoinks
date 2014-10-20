@@ -30,12 +30,10 @@ function addDive() {
 	// If this isn't the initialization, also add a surface interval
 	if (_profile.dives.length !== 0) {
 		_profile.surfaceIntervals.push({
-			id: _profile.surfaceIntervals.length,
 			time: algo.DEFAULT_SURFACE_INTERVAL
 		});
 	}
 	_profile.dives.push({
-		id: _profile.dives.length,
 		title: 'New Dive',
 		depth: algo.DEFAULT_DEPTH,
 		time: algo.DEFAULT_TIME
@@ -67,12 +65,11 @@ function loadProfile(profile) {
 }
 
 function validateProfile(profile) {
-	var valid = utils.validate(profile, {
+	return utils.validate(profile, {
 		units: function(e) {
 			return ['feet', 'meters'].indexOf(e) !== -1;
 		},
 		dives: [{
-			id: 'number',
 			title: 'string',
 			depth: function(e) {
 				return e >= algo.MIN_DEPTH && e <= algo.MAX_DEPTH;
@@ -87,21 +84,6 @@ function validateProfile(profile) {
 			}
 		}]
 	});
-	if (!valid) {
-		return false;
-	}
-	var i;
-	for (i = 0; i < profile.dives.length; i++) {
-		if (profile.dives[i].id !== i) {
-			return false;
-		}
-	}
-	for (i = 0; i < profile.surfaceIntervals.length; i++) {
-		if (profile.surfaceIntervals[i].id !== i) {
-			return false;
-		}
-	}
-	return true;
 }
 
 
