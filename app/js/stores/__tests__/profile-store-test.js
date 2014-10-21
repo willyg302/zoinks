@@ -111,4 +111,35 @@ describe('ProfileStore', function() {
 		var profile = ProfileStore.getProfile();
 		expect(profile.i).toEqual('like pie');
 	});
+
+	it('correctly invalidates common profile mistakes', function() {
+		// Bad units
+		expect(ProfileStore.validateProfile({
+			units: 'fet',
+			dives: [{
+				title: 'fake',
+				depth: 0,
+				time: 0
+			}],
+			surfaceIntervals: []
+		}).valid).toBe(false);
+		// Missing dive
+		expect(ProfileStore.validateProfile({
+			units: 'meters',
+			dives: [],
+			surfaceIntervals: []
+		}).valid).toBe(false);
+		// Invalid values
+		expect(ProfileStore.validateProfile({
+			units: 'feet',
+			dives: [{
+				title: 'Marianas Trench',
+				depth: -1,
+				time: 3000
+			}],
+			surfaceIntervals: [{
+				time: 'not even a number'
+			}]
+		}).errors.length).toBe(3);
+	});
 });

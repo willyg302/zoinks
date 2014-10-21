@@ -33,28 +33,4 @@ utils.getTimeString = function(min) {
 	].join(' ').trim();
 };
 
-utils.validate = function self(actual, expected) {
-	if (expected instanceof Array) {
-		if (!(actual instanceof Array)) {
-			return false;
-		}
-		for (var i = 0; i < actual.length; i++) {
-			if (!self(actual[i], expected[0])) {
-				return false;
-			}
-		}
-		return true;
-	} else if (typeof expected === 'object') {
-		for (var e in expected) {
-			if (expected.hasOwnProperty(e) && !(actual.hasOwnProperty(e) && self(actual[e], expected[e]))) {
-				return false;
-			}
-		}
-		return true;
-	} else if (typeof expected === 'function') {
-		return expected(actual);
-	}
-	return (typeof actual === expected);
-};
-
 module.exports = utils;

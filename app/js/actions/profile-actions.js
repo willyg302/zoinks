@@ -66,13 +66,18 @@ var ProfileActions = {
 	loadProfileFromString: function(s) {
 		try {
 			var json = JSON.parse(s);
-			var valid = ProfileStore.validateProfile(json);
-			if (valid) {
+			var result = ProfileStore.validateProfile(json);
+			if (result.valid) {
 				this.loadProfile(json);
 			}
-			return valid;
+			return result;
 		} catch (e) {
-			return false;
+			return {
+				valid: false,
+				errors: [{
+					message: 'Invalid JSON object'
+				}]
+			};
 		}
 	}
 };

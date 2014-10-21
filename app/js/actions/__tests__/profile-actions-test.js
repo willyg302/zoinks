@@ -36,11 +36,11 @@ describe('ProfileActions', function() {
 
 	it('correctly handles loading a profile from a string', function() {
 		ProfileStore = require('../../stores/profile-store');
-		ProfileStore.validateProfile.mockReturnValueOnce(false).mockReturnValueOnce(true);
-		expect(ProfileActions.loadProfileFromString('not json')).toBe(false);
-		expect(ProfileActions.loadProfileFromString('{"a": "b"}')).toBe(false);
+		ProfileStore.validateProfile.mockReturnValueOnce({valid: false}).mockReturnValueOnce({valid: true});
+		expect(ProfileActions.loadProfileFromString('not json').valid).toBe(false);
+		expect(ProfileActions.loadProfileFromString('{"a": "b"}').valid).toBe(false);
 		expect(AppDispatcher.handleViewAction.mock.calls.length).toBe(0);
-		expect(ProfileActions.loadProfileFromString('{"hey": "this will work"}')).toBe(true);
+		expect(ProfileActions.loadProfileFromString('{"hey": "this will work"}').valid).toBe(true);
 		expect(AppDispatcher.handleViewAction.mock.calls[0][0]).toEqual({
 			actionType: Constants.PROFILE_LOAD,
 			profile: {hey: 'this will work'}

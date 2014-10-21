@@ -17,7 +17,8 @@
     "flux": "~2.0.1",
     "react": "~0.11.2",
     "react-bootstrap": "~0.12.0",
-    "react-tools": "~0.11.2"
+    "react-tools": "~0.11.2",
+    "tv4": "~1.1.4"
   },
   "devDependencies": {
     "gulp": "~3.8.8",

@@ -12,33 +12,6 @@
 jest.dontMock('../utils');
 
 describe('utils', function() {
-	var complexActual = {
-		a: ['Is', 'this', 'the', 'real', 'life?'],
-		profile: {
-			name: 'Freddie Mercury',
-			location: 'landslide',
-			occupation: 'poor boy',
-			comments: [
-				'Is this just fantasy?',
-				'No escape from reality'
-			],
-			willTheyLetHimGo: false
-		}
-	};
-
-	var complexExpected = {
-		a: ['string'],
-		profile: {
-			name: 'string',
-			location: 'string',
-			occupation: 'string',
-			comments: function(e) {
-				return e.length > 0;
-			},
-			willTheyLetHimGo: 'boolean'
-		}
-	};
-
 	beforeEach(function() {
 		utils = require('../utils');
 	});
@@ -55,23 +28,5 @@ describe('utils', function() {
 		expect(utils.getTimeString(120)).toEqual('2 hr');
 		expect(utils.getTimeString(314)).toEqual('5 hr 14 min');
 		expect(utils.getTimeString(0)).toEqual('0 min');
-	});
-
-	it('validates objects correctly', function() {
-		expect(utils.validate([], 5)).toBe(false);
-		expect(utils.validate([1, 'fail', 3], ['number'])).toBe(false);
-		expect(utils.validate(['this', 'will', 'pass'], ['string'])).toBe(true);
-		expect(utils.validate({a: 'You shall not pass!'}, {a: 'number'})).toBe(false);
-		expect(utils.validate(5, function(e) {
-			return e === Math.PI;
-		})).toBe(false);
-		expect(utils.validate({hey: 'look at me!'}, function(e) {
-			return e.hey === 'look at me!';
-		})).toBe(true);
-		expect(utils.validate(5, 'number')).toBe(true);
-	});
-
-	it('handles a complex nested validation', function() {
-		expect(utils.validate(complexActual, complexExpected)).toBe(true);
 	});
 });

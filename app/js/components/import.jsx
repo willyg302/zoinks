@@ -21,13 +21,27 @@ var ModalIcon = require('./modal-icon.jsx');
 var Import = React.createClass({
 	getInitialState: function() {
 		return {
-			valid: true
+			valid: true,
+			errors: []
 		};
 	},
 	render: function() {
 		var alert;
 		if (!this.state.valid) {
-			alert = <Alert bsStyle="danger"><strong>Error!</strong> The imported data is not a valid dive plan.</Alert>;
+			alert = (
+				<Alert bsStyle="danger">
+					<strong>Error!</strong> The imported data is not a valid dive plan.
+					<ul>
+						{this.state.errors.map(function(error) {
+							var path;
+							if (error.dataPath) {
+								path = <span>{error.dataPath}: </span>;
+							}
+							return <li>{path}{error.message}</li>;
+						})}
+					</ul>
+				</Alert>
+			);
 		}
 		var modalBody = (
 			<div>
@@ -42,13 +56,14 @@ var Import = React.createClass({
 		);
 	},
 	_onClickImport: function() {
-		var valid = ProfileActions.loadProfileFromString(this.refs.input.getValue());
-		if (!valid) {
+		var result = ProfileActions.loadProfileFromString(this.refs.input.getValue());
+		if (!result.valid) {
 			this.setState({
-				valid: false
+				valid: false,
+				errors: result.errors
 			});
 		}
-		return !valid;
+		return !result.valid;
 	},
 	_onOpen: function() {
 		this.refs.input.getDOMNode().value = '';
