@@ -101,11 +101,11 @@ function removeDive() {
 }
 
 function updateDive(id, delta) {
-	_profile.dives[id] = merge(_profile.dives[id], delta);
+	_profile.dives[id] = merge(_profile.dives[id], delta);  // Let's be immutable
 }
 
 function updateSurfaceInterval(id, time) {
-	_profile.surfaceIntervals[id].time = time;
+	_profile.surfaceIntervals[id] = merge(_profile.surfaceIntervals[id], {time: time});  // Let's be immutable
 }
 
 function changeProfileUnits(units) {

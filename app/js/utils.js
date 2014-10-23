@@ -24,12 +24,18 @@ utils.convertUnits = function(v, from, to) {
 	return (to === 'meters' ? this.toMeters(v) : this.toFeet(v));
 };
 
+utils.splitTime = function(min) {
+	return {
+		h: Math.floor(min / 60),
+		m: min % 60
+	};
+};
+
 utils.getTimeString = function(min) {
-	var h = Math.floor(min / 60);
-	var m = min % 60;
+	var x = this.splitTime(min);
 	return [
-		h === 0 ? '' : (h + " hr"),
-		(m === 0 && h !== 0) ? '' : (m + " min")
+		x.h === 0 ? '' : (x.h + " hr"),
+		(x.m === 0 && x.h !== 0) ? '' : (x.m + " min")
 	].join(' ').trim();
 };
 

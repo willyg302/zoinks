@@ -21,9 +21,4 @@ padi.MIN_SURFACE_INTERVAL = 0;
 padi.MAX_SURFACE_INTERVAL = 360;
 padi.DEFAULT_SURFACE_INTERVAL = 60;
 
-padi.getTimeToFly = function() {
-	// @TODO - this should take an argument which is the entire profile...?
-	return 18;
-};
-
 module.exports = padi;

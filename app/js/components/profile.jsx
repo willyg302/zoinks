@@ -57,7 +57,6 @@ var Profile = React.createClass({
 			</div>
 		);
 	},
-
 	_onProfileChange: function(actionType) {
 		if (actionType === Constants.DIVE_ADD) {
 			// Scroll all the way to the right to see the new dive

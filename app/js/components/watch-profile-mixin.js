@@ -27,7 +27,7 @@ var WatchProfileMixin = {
 	 */
 	_onChange: function(actionType) {
 		this.setState(ProfileStore.getProfile(), function() {
-			if (typeof this._onProfileChange == 'function') {
+			if (typeof this._onProfileChange === 'function') {
 				this._onProfileChange(actionType);
 			}
 		});

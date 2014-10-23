@@ -10,6 +10,7 @@
  * @license MIT
  */
 var React = require('react');
+var merge = require('react/lib/merge');
 
 var Button = require('react-bootstrap/Button');
 var Input = require('react-bootstrap/Input');
@@ -22,20 +23,18 @@ var utils = require('../utils');
 
 var SurfaceInterval = React.createClass({
 	getInitialState: function() {
-		return {
-			editing: false
-		};
+		return merge({ editing: false }, utils.splitTime(this.props.time));
 	},
 	render: function() {
 		var elem;
 		if (this.state.editing) {
 			elem = (
 				<form className="form-inline" onSubmit={this._onSave}>
-					<OverlayTrigger ref="h" placement="top" overlay={<Tooltip>Hours</Tooltip>}>
-						<Input type="number" defaultValue={Math.floor(this.props.time / 60)} min="0" max="5" />
+					<OverlayTrigger placement="top" overlay={<Tooltip>Hours</Tooltip>}>
+						<Input type="number" value={this.state.h} min="0" max="5" onChange={this._onEditHours} />
 					</OverlayTrigger>
-					<OverlayTrigger ref="m" placement="top" overlay={<Tooltip>Minutes</Tooltip>}>
-						<Input type="number" defaultValue={this.props.time % 60} min="0" max="59" />
+					<OverlayTrigger placement="top" overlay={<Tooltip>Minutes</Tooltip>}>
+						<Input type="number" value={this.state.m} min="0" max="59" onChange={this._onEditMinutes} />
 					</OverlayTrigger>
 					<OverlayTrigger placement="top" overlay={<Tooltip>Minimize Time</Tooltip>}>
 						<Button bsStyle="warning" onClick={this._onClickMinimize}>&#9660;</Button>
@@ -57,19 +56,26 @@ var SurfaceInterval = React.createClass({
 			</div>
 		);
 	},
-	_onClickToEdit: function(e) {
+	_onEditHours: function(e) {
 		this.setState({
-			editing: true
+			h: parseInt(e.target.value)
 		});
 	},
+	_onEditMinutes: function(e) {
+		this.setState({
+			m: parseInt(e.target.value)
+		});
+	},
+	_onClickToEdit: function(e) {
+		this.setState(merge({ editing: true }, utils.splitTime(this.props.time)));
+	},
 	_onClickMinimize: function(e) {
-		// @TODO
+		var minimized = algo.minimizeSurfaceInterval(this.props.id);
+		this.setState(utils.splitTime(minimized));
 	},
 	_onSave: function(e) {
 		e.preventDefault();
-		var h = parseInt(this.refs.h.getDOMNode().querySelector('.form-control').value);
-		var m = parseInt(this.refs.m.getDOMNode().querySelector('.form-control').value);
-		ProfileActions.updateSurfaceInterval(this.props.id, 60 * h + m);
+		ProfileActions.updateSurfaceInterval(this.props.id, 60 * this.state.h + this.state.m);
 		this.setState({
 			editing: false
 		});
