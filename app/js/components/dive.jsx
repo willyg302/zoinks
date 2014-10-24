@@ -56,7 +56,7 @@ var Dive = React.createClass({
 				<div className="diagram">
 					<img className="boat" src="img/boat.svg" />
 					<img className="boat" src="img/boat.svg" style={{left: (w - 64) + "px"}} />
-					<Draggable start={{x: bt, y: 10 * d}} validateDrag={this._validateDrag} onDrag={this._onDrag}>
+					<Draggable x={bt} y={10 * d} validateDrag={this._validateDrag} onDrag={this._onDrag}>
 						<img className="diver" src={"img/" + statusClass + ".svg"} />
 					</Draggable>
 					<Tooltip className="diver-tooltip" positionLeft={bt + 64} positionTop={10 * d}>

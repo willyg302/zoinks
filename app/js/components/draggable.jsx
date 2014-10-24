@@ -18,13 +18,8 @@ var Draggable = React.createClass({
 		document.removeEventListener('mousemove', this._onMouseMove);
 		document.removeEventListener('mouseup', this._onMouseUp);
 	},
-
 	getDefaultProps: function() {
 		return {
-			start: {
-				x: 0,
-				y: 0
-			},
 			onDrag: emptyFunction,
 			validateDrag: function(pos) {
 				return [true, true];
@@ -34,66 +29,49 @@ var Draggable = React.createClass({
 	getInitialState: function() {
 		return {
 			dragging: false,
-			startX: 0,
-			startY: 0,
-			offsetX: 0,
-			offsetY: 0,
-			clientX: this.props.start.x,
-			clientY: this.props.start.y
+			dragStartX: 0,
+			dragStartY: 0
 		};
 	},
 	render: function() {
-		var style = {
-			top: this.state.clientY,
-			left: this.state.clientX
-		};
 		return React.addons.cloneWithProps(React.Children.only(this.props.children), {
-			style: style,
+			style: {
+				left: this.props.x,
+				top: this.props.y
+			},
 			className: 'draggable',
 			onMouseUp: this._onMouseUp,
 			onMouseDown: this._onMouseDown
 		});
 	},
-
 	_onMouseDown: function(e) {
-		var node = this.getDOMNode();
-
 		this.setState({
 			dragging: true,
-			offsetX: e.clientX,
-			offsetY: e.clientY,
-			startX: parseInt(node.style.left, 10) || 0,
-			startY: parseInt(node.style.top, 10) || 0
+			dragStartX: this.props.x - e.clientX,
+			dragStartY: this.props.y - e.clientY
 		});
-
-		// Add event handlers
 		document.addEventListener('mousemove', this._onMouseMove);
 		document.addEventListener('mouseup', this._onMouseUp);
 	},
 	_onMouseUp: function(e) {
-		if (!this.state.dragging) {
-			return;
-		}
 		this.setState({
 			dragging: false
 		});
-
-		// Remove event handlers
 		document.removeEventListener('mousemove', this._onMouseMove);
 		document.removeEventListener('mouseup', this._onMouseUp);
 	},
 	_onMouseMove: function(e) {
-		var newX = this.state.startX + e.clientX - this.state.offsetX;
-		var newY = this.state.startY + e.clientY - this.state.offsetY;
+		if (!this.state.dragging) {
+			return;
+		}
+		var newX = this.state.dragStartX + e.clientX;
+		var newY = this.state.dragStartY + e.clientY;
 
 		// Callback to validate the drag
 		var validated = this.props.validateDrag(newX, newY);
-		this.setState({
-			clientX: validated[0] ? newX : this.state.clientX,
-			clientY: validated[1] ? newY : this.state.clientY
-		}, function() {
-			this.props.onDrag(this.state.clientX, this.state.clientY);
-		});
+		newX = validated[0] ? newX : this.props.x;
+		newY = validated[1] ? newY : this.props.y;
+		this.props.onDrag(newX, newY);
 	}
 });
 
