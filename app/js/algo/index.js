@@ -21,8 +21,10 @@ algo.status = keyMirror({
  * Given the ID of a dive in the dive profile,
  * returns an enum indicating the status of the dive (good, warning, bad).
  */
-algo.getStatus = function(dive) {
+algo.getStatus = function(profile, id) {
 	// @TODO: Actually do this. Should depend on previous dives.
+	var dive = profile.dives[id];
+
 	if (dive.depth === this.MAX_DEPTH || dive.time === this.MAX_TIME) {
 		return this.status.BAD;
 	}
@@ -35,18 +37,32 @@ algo.getStatus = function(dive) {
 /**
  * Returns the number of hours until it is safe to fly, based on the current dive profile.
  */
-algo.getTimeToFly = function() {
-	// @TODO
-	return 18;
+algo.getTimeToFly = function(profile) {
+	return (profile.dives.length === 1) ? 12 : 18;
 };
 
 /**
  * Given the ID of a surface interval in the dive profile,
  * returns the minimum safe (green) surface interval, in minutes.
  */
-algo.minimizeSurfaceInterval = function(id) {
+algo.minimizeSurfaceInterval = function(profile, id) {
 	// @ TODO
 	return 10;
 };
 
+/**
+*given the id of the dive returns the maximum safe depth 
+*/
+algo.maximizeDepth = function(profile, id) {
+	// @ TODO
+	return 10; 
+};
+
+/**
+*given the id of the dive  returns the maximum time
+*/
+algo.maximizeTime = function(profile, id) {
+	// @ TODO
+	return 20; 
+};
 module.exports = algo;
