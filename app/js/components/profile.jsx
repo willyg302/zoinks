@@ -47,7 +47,7 @@ var Profile = React.createClass({
 				{elems}
 				<div className="plane">
 					<img src="img/plane.svg" />
-					<span>{algo.getTimeToFly()} hr</span>
+					<span>{algo.getTimeToFly(this.state)} hr</span>
 				</div>
 				<div className="plusminus">
 					<Icon name="plus" click={this._onAddDiveClick} position="left" desc="Add New Dive" />

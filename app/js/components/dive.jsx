@@ -13,6 +13,7 @@ var React = require('react');
 
 var Tooltip = require('react-bootstrap/Tooltip');
 
+var ProfileStore = require('../stores/profile-store');
 var ProfileActions = require('../actions/profile-actions');
 var algo = require('../algo');
 var utils = require('../utils');
@@ -46,7 +47,7 @@ var Dive = React.createClass({
 				points = points.replace(new RegExp(k, 'g'), replacements[k]);
 			}
 		}
-		var status = algo.getStatus(this.props);
+		var status = algo.getStatus(ProfileStore.getProfile(), this.props.id);
 		var statusClass = (status === algo.status.BAD ? 'bad' : (status === algo.status.WARNING ? 'warning' : 'good'));
 		var depthValue = utils.convertUnits(this.props.depth, 'meters', this.props.units).toFixed(1);
 		var depthString = (this.props.units === 'meters' ? 'm' : 'ft');
