@@ -1,0 +1,90 @@
+\documentclass[17pt]{article}
+
+\usepackage{extsizes}
+\usepackage{hyperref}
+
+\begin{document}
+
+The following was derived from \href{http://zunzun.com/}{ZunZun Online Curve Fitting} and this \href{http://www.orka.lt/img/planner.jpg}{PADI Dive Table}.
+
+\section{Bad Dive}
+
+For the following, $T$ is time in minutes and $D$ is depth in meters.
+
+$D = aT^b$
+
+$a = 105.4459074484564$
+
+$b = -0.4334667424949577$
+
+Confidence: $99.5676288247\%$
+
+The dive is \textbf{bad} if $D > aT^b$.
+
+\section{Warning Dive}
+
+For the following, $T$ is time in minutes and $D$ is depth in meters.
+
+$D = aT^b$
+
+$a = 113.95854764967993$
+
+$b = -0.48150981158021355$
+
+Confidence: $99.7903238392\%$
+
+The dive is \textbf{warning} if $D > \min 30, aT^b$.
+
+\newpage
+
+\section{Pressure Group}
+
+For the following, $T$ is time in minutes, $D$ is depth in meters, and $P$ is the pressure group.
+
+$P = se^{-\frac{1}{2}\left[\left(\frac{ln(T) - m}{n}\right)^2 + \left(\frac{ln(D) - q}{r}\right)^2\right]} + c$
+
+$s = 2.2648834727001601 \times 10^{160}$
+
+$m = 7.0123592040257003$
+
+$n = 1.7946238745730789$
+
+$q = 552.85426276703538$
+
+$r = -20.363335715433173$
+
+$c = -1.0231048129283549$
+
+Confidence: $99.2837041717\%$
+
+\newpage
+
+\section{Reduced Pressure Group}
+
+For the following, $P$ is the pressure group, $I_S$ is the surface interval, and $P_R$ is the reduced pressure group.
+
+$P_R = $
+
+$I_S = $
+
+\newpage
+
+\section{RNT}
+
+For the following, $P_R$ is the reduced pressure group, $D'$ is depth in meters of the \emph{next} dive, and $RNT$ is the RNT.
+
+$RNT = $
+
+$P_R = $
+
+\newpage
+
+\section{Other Formulas}
+
+\begin{itemize}
+	\item To calculate the maximum safe depth given a time, use the \textbf{Warning Dive} formula and find $D = \min 30, aT^b$. Note that if the dive is a repeat dive, then you need to find the $RNT$ and add it to $T$ first.
+	\item To calculate the maximum safe time given a depth, use the \textbf{Warning Dive} formula. If $D > 30$ then $T = 0$, else $T = \left(\frac{D}{a}\right)^{\frac{1}{b}}$. Note that if the dive is a repeat dive, then you need to find the $RNT$ and subtract it from $T$ after it is calculated.
+	\item To calculate the minimum safe surface interval, first find the maximum safe time for the \emph{next} dive. This minus the actual time is the maximum safe $RNT$. Using the \textbf{RNT} formula, find $P_R$. Then using the \textbf{Pressure Group} formula, find $P$. Finally using the \textbf{Reduced Pressure Group} formula you can find $I_S$.
+\end{itemize}
+
+\end{document}
