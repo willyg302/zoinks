@@ -11,7 +11,7 @@ The following was derived from \href{http://zunzun.com/}{ZunZun Online Curve Fit
 
 For the following, $T$ is time in minutes and $D$ is depth in meters.
 
-$D = aT^b$
+$$D = aT^b$$
 
 $a = 105.4459074484564$
 
@@ -25,7 +25,7 @@ The dive is \textbf{bad} if $D > aT^b$.
 
 For the following, $T$ is time in minutes and $D$ is depth in meters.
 
-$D = aT^b$
+$$D = aT^b$$
 
 $a = 113.95854764967993$
 
@@ -41,7 +41,7 @@ The dive is \textbf{warning} if $D > \min 30, aT^b$.
 
 For the following, $T$ is time in minutes, $D$ is depth in meters, and $P$ is the pressure group.
 
-$P = se^{-\frac{1}{2}\left[\left(\frac{ln(T) - m}{n}\right)^2 + \left(\frac{ln(D) - q}{r}\right)^2\right]} + c$
+$$P = se^{-\frac{1}{2}\left[\left(\frac{ln(T) - m}{n}\right)^2 + \left(\frac{ln(D) - q}{r}\right)^2\right]} + c$$
 
 $s = 2.2648834727001601 \times 10^{160}$
 
@@ -63,9 +63,23 @@ Confidence: $99.2837041717\%$
 
 For the following, $P$ is the pressure group, $I_S$ is the surface interval, and $P_R$ is the reduced pressure group.
 
-$P_R = $
+$$P_R = se^{-\frac{1}{2}\left[\left(\frac{P - m}{n}\right)^2 + \left(\frac{I_S - q}{r}\right)^2\right]} + c$$
 
-$I_S = $
+$$I_S = r\sqrt{-2ln\left(\frac{P_R - c}{s}\right) - \left(\frac{P - m}{n}\right)^2} + q$$
+
+$s = 116.54299853808371$
+
+$m = 33.212036458693376$
+
+$n = -15.10250855396535$
+
+$q = -186.32853553152427$
+
+$r = 112.18008663409428$
+
+$c = 0.82154053080283274$
+
+Confidence: $99.6684975784\%$
 
 \newpage
 
@@ -73,9 +87,21 @@ $I_S = $
 
 For the following, $P_R$ is the reduced pressure group, $D'$ is depth in meters of the \emph{next} dive, and $RNT$ is the RNT.
 
-$RNT = $
+$$RNT = \frac{c + mln(P_R) + nln(D')}{1 + qln(P_R) + rln(D')}$$
 
-$P_R = $
+$$P_R = e^\frac{c - RNT + [n - RNT(r)]ln(D')}{RNT(q) - m}$$
+
+$c = 76.081117597706665$
+
+$m = 4.1581576427587992$
+
+$n = -19.592050053069073$
+
+$q = -0.5708514716494717$
+
+$r = 0.46114751660456582$
+
+Confidence: $99.8987810044\%$
 
 \newpage
 
