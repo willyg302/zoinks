@@ -11,6 +11,10 @@
  */
 var React = require('react');
 
+var Button = require('react-bootstrap/Button');
+var Input = require('react-bootstrap/Input');
+var Modal = require('react-bootstrap/Modal');
+var OverlayMixin = require('react-bootstrap/OverlayMixin');
 var Tooltip = require('react-bootstrap/Tooltip');
 
 var ProfileStore = require('../stores/profile-store');
@@ -21,10 +25,13 @@ var utils = require('../utils');
 var Draggable = require('./draggable.jsx');
 
 var Dive = React.createClass({
+	mixins: [OverlayMixin],
+
 	getInitialState: function() {
 		return {
-			depthStyle: 'success',
-			timeStyle: 'success'
+			editing: false,
+			editDepth: this.props.depth,
+			editTime: this.props.time
 		};
 	},
 	render: function() {
@@ -57,7 +64,8 @@ var Dive = React.createClass({
 				<div className="diagram">
 					<img className="boat" src="img/boat.svg" />
 					<img className="boat" src="img/boat.svg" style={{left: (w - 64) + "px"}} />
-					<Draggable x={bt} y={10 * d} validateDrag={this._validateDrag} onDrag={this._onDrag}>
+					<Draggable x={bt} y={10 * d} adjustDrag={this._adjustDrag} onDrag={this._onDrag}
+					           onDoubleClick={this._onOpenModal}>
 						<img className="diver" src={"img/" + statusClass + ".svg"} />
 					</Draggable>
 					<Tooltip className="diver-tooltip" positionLeft={bt + 64} positionTop={10 * d}>
@@ -74,26 +82,72 @@ var Dive = React.createClass({
 			</div>
 		);
 	},
+	renderOverlay: function() {
+		if (!this.state.editing) {
+			return <span />;
+		}
+		return (
+			<Modal title={"Edit " + this.props.title} onRequestHide={this._onCloseModal}>
+				<form onSubmit={this._onClickSave}>
+					<div className="modal-body">
+						<Input type="number" value={this.state.editDepth} onChange={this._onEditDepth}
+						       min={algo.MIN_DEPTH} max={algo.MAX_DEPTH} />
+						<Input type="number" value={this.state.editTime} onChange={this._onEditTime}
+						       min={algo.MIN_TIME} max={algo.MAX_TIME} />
+					</div>
+					<div className="modal-footer">
+						<Button onClick={this._onCloseModal}>Cancel</Button>
+						<Button bsStyle="primary" type="submit">Save</Button>
+					</div>
+				</form>
+			</Modal>
+		);
+	},
+	_onOpenModal: function() {
+		this.setState({
+			editing: true,
+			editDepth: this.props.depth,
+			editTime: this.props.time
+		});
+	},
+	_onCloseModal: function() {
+		this.setState({
+			editing: false
+		});
+	},
+	_onClickSave: function(e) {
+		e.preventDefault();
+		ProfileActions.updateDive(this.props.id, {
+			depth: this.state.editDepth,
+			time: this.state.editTime
+		});
+		this._onCloseModal();
+		return false;
+	},
 	_onEditTitle: function(e) {
 		ProfileActions.updateDiveTitle(this.props.id, e.target.value);
 	},
 	_onEditDepth: function(e) {
-		ProfileActions.updateDiveDepth(this.props.id, this.refs.depth.getValue());
+		this.setState({
+			editDepth: parseInt(e.target.value)
+		});
 	},
 	_onEditTime: function(e) {
-		ProfileActions.updateDiveTime(this.props.id, this.refs.time.getValue());
+		this.setState({
+			editTime: parseInt(e.target.value)
+		});
 	},
-	_validateDrag: function(x, y) {
-		var newDepth = y / 10;
-		var newTime = (x - newDepth / 2) / 10;
-		return [
-			(newTime >= algo.MIN_TIME && newTime <= algo.MAX_TIME),
-			(newDepth >= algo.MIN_DEPTH && newDepth <= algo.MAX_DEPTH)
-		];
+	_adjustDrag: function(pos) {
+		var y = Math.min(Math.max(pos.y, 10 * algo.MIN_DEPTH), 10 * algo.MAX_DEPTH);
+		var x = Math.min(Math.max(pos.x, 10 * algo.MIN_TIME + y / 20), 10 * algo.MAX_TIME + y / 20);
+		return {
+			x: x,
+			y: y
+		};
 	},
-	_onDrag: function(x, y) {
-		var newDepth = y / 10;
-		var newTime = (x - newDepth / 2) / 10;
+	_onDrag: function(pos) {
+		var newDepth = pos.y / 10;
+		var newTime = (pos.x - newDepth / 2) / 10;
 		ProfileActions.updateDive(this.props.id, {
 			depth: newDepth,
 			time: newTime

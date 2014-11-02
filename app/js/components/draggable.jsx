@@ -21,8 +21,9 @@ var Draggable = React.createClass({
 	getDefaultProps: function() {
 		return {
 			onDrag: emptyFunction,
-			validateDrag: function(pos) {
-				return [true, true];
+			onDoubleClick: emptyFunction,
+			adjustDrag: function(pos) {
+				return pos;
 			}
 		};
 	},
@@ -41,7 +42,8 @@ var Draggable = React.createClass({
 			},
 			className: 'draggable',
 			onMouseUp: this._onMouseUp,
-			onMouseDown: this._onMouseDown
+			onMouseDown: this._onMouseDown,
+			onDoubleClick: this.props.onDoubleClick
 		});
 	},
 	_onMouseDown: function(e) {
@@ -64,14 +66,12 @@ var Draggable = React.createClass({
 		if (!this.state.dragging) {
 			return;
 		}
-		var newX = this.state.dragStartX + e.clientX;
-		var newY = this.state.dragStartY + e.clientY;
-
-		// Callback to validate the drag
-		var validated = this.props.validateDrag(newX, newY);
-		newX = validated[0] ? newX : this.props.x;
-		newY = validated[1] ? newY : this.props.y;
-		this.props.onDrag(newX, newY);
+		// Allow owners to adjust the drag if necessary
+		var adjusted = this.props.adjustDrag({
+			x: this.state.dragStartX + e.clientX,
+			y: this.state.dragStartY + e.clientY
+		});
+		this.props.onDrag(adjusted);
 	}
 });
 
