@@ -17,6 +17,7 @@ var Input = require('react-bootstrap/Input');
 var OverlayTrigger = require('react-bootstrap/OverlayTrigger');
 var Tooltip = require('react-bootstrap/Tooltip');
 
+var ProfileStore = require('../stores/profile-store');
 var ProfileActions = require('../actions/profile-actions');
 var algo = require('../algo');
 var utils = require('../utils');
@@ -43,12 +44,12 @@ var SurfaceInterval = React.createClass({
 						<Button bsStyle="primary" type="submit">&#10004;</Button>
 					</OverlayTrigger>
 					<OverlayTrigger placement="top" overlay={<Tooltip>Cancel</Tooltip>}>
-						<Button bsStyle="default" onClick={this._onClickCancel}>&#10006;</Button>
+						<Button bsStyle="default" onClick={this._onCloseEdit}>&#10006;</Button>
 					</OverlayTrigger>
 				</form>
 			);
 		} else {
-			elem = <span className="display" onClick={this._onClickToEdit}>{utils.getTimeString(this.props.time)}</span>;
+			elem = <span className="display" onClick={this._onOpenEdit}>{utils.getTimeString(this.props.time)}</span>;
 		}
 		return (
 			<div className="surface-interval">
@@ -66,25 +67,23 @@ var SurfaceInterval = React.createClass({
 			m: parseInt(e.target.value)
 		});
 	},
-	_onClickToEdit: function(e) {
+	_onOpenEdit: function() {
 		this.setState(merge({ editing: true }, utils.splitTime(this.props.time)));
 	},
-	_onClickMinimize: function(e) {
-		var minimized = algo.minimizeSurfaceInterval(this.props.id);
+	_onCloseEdit: function() {
+		this.setState({
+			editing: false
+		});
+	},
+	_onClickMinimize: function() {
+		var minimized = algo.minimizeSurfaceInterval(ProfileStore.getProfile(), this.props.id);
 		this.setState(utils.splitTime(minimized));
 	},
 	_onSave: function(e) {
 		e.preventDefault();
 		ProfileActions.updateSurfaceInterval(this.props.id, 60 * this.state.h + this.state.m);
-		this.setState({
-			editing: false
-		});
+		this._onCloseEdit();
 		return false;
-	},
-	_onClickCancel: function(e) {
-		this.setState({
-			editing: false
-		});
 	}
 });
 

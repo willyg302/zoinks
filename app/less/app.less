@@ -134,8 +134,8 @@ a.icon {
 	display: inline-block;
 	position: relative;
 	top: 60px;
-	padding: 8px;
-	margin-right: 8px;
+	padding: @layout-padding;
+	margin-right: @layout-padding;
 	width: 296px;
 
 	input {
@@ -210,5 +210,13 @@ a.icon {
 		width: @layout-base;
 		float: left;
 		margin-right: @layout-padding;
+	}
+}
+
+.edit-dive .btn {
+	width: 100%;
+
+	&:first-child {
+		margin-bottom: @layout-padding;
 	}
 }

@@ -55,7 +55,7 @@ var Draggable = React.createClass({
 		document.addEventListener('mousemove', this._onMouseMove);
 		document.addEventListener('mouseup', this._onMouseUp);
 	},
-	_onMouseUp: function(e) {
+	_onMouseUp: function() {
 		this.setState({
 			dragging: false
 		});

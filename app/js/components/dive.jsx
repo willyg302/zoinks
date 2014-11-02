@@ -12,9 +12,7 @@
 var React = require('react');
 
 var Button = require('react-bootstrap/Button');
-var Input = require('react-bootstrap/Input');
-var Modal = require('react-bootstrap/Modal');
-var OverlayMixin = require('react-bootstrap/OverlayMixin');
+var Popover = require('react-bootstrap/Popover');
 var Tooltip = require('react-bootstrap/Tooltip');
 
 var ProfileStore = require('../stores/profile-store');
@@ -25,13 +23,9 @@ var utils = require('../utils');
 var Draggable = require('./draggable.jsx');
 
 var Dive = React.createClass({
-	mixins: [OverlayMixin],
-
 	getInitialState: function() {
 		return {
-			editing: false,
-			editDepth: this.props.depth,
-			editTime: this.props.time
+			editing: false
 		};
 	},
 	render: function() {
@@ -58,6 +52,15 @@ var Dive = React.createClass({
 		var statusClass = (status === algo.status.BAD ? 'bad' : (status === algo.status.WARNING ? 'warning' : 'good'));
 		var depthValue = utils.convertUnits(this.props.depth, 'meters', this.props.units).toFixed(1);
 		var depthString = (this.props.units === 'meters' ? 'm' : 'ft');
+		var editPopover;
+		if (this.state.editing) {
+			editPopover = (
+				<Popover className="edit-dive" placement="right" positionLeft={bt + 60} positionTop={10 * d - 20}>
+					<Button bsStyle="primary" onClick={this._onMaximizeDepth}>Maximize Depth</Button>
+					<Button bsStyle="primary" onClick={this._onMaximizeTime}>Maximize Time</Button>
+				</Popover>
+			);
+		}
 		return (
 			<div className="dive" style={{width: (w + 16) + "px"}}>
 				<input className="form-control input-lg" onChange={this._onEditTitle} value={this.props.title} maxLength="140" />
@@ -65,9 +68,10 @@ var Dive = React.createClass({
 					<img className="boat" src="img/boat.svg" />
 					<img className="boat" src="img/boat.svg" style={{left: (w - 64) + "px"}} />
 					<Draggable x={bt} y={10 * d} adjustDrag={this._adjustDrag} onDrag={this._onDrag}
-					           onDoubleClick={this._onOpenModal}>
+					           onDoubleClick={this._onToggleEdit}>
 						<img className="diver" src={"img/" + statusClass + ".svg"} />
 					</Draggable>
+					{editPopover}
 					<Tooltip className="diver-tooltip" positionLeft={bt + 64} positionTop={10 * d}>
 						{depthValue} {depthString}<br />
 						{this.props.time.toFixed(1)} min
@@ -82,59 +86,20 @@ var Dive = React.createClass({
 			</div>
 		);
 	},
-	renderOverlay: function() {
-		if (!this.state.editing) {
-			return <span />;
-		}
-		return (
-			<Modal title={"Edit " + this.props.title} onRequestHide={this._onCloseModal}>
-				<form onSubmit={this._onClickSave}>
-					<div className="modal-body">
-						<Input type="number" value={this.state.editDepth} onChange={this._onEditDepth}
-						       min={algo.MIN_DEPTH} max={algo.MAX_DEPTH} />
-						<Input type="number" value={this.state.editTime} onChange={this._onEditTime}
-						       min={algo.MIN_TIME} max={algo.MAX_TIME} />
-					</div>
-					<div className="modal-footer">
-						<Button onClick={this._onCloseModal}>Cancel</Button>
-						<Button bsStyle="primary" type="submit">Save</Button>
-					</div>
-				</form>
-			</Modal>
-		);
-	},
-	_onOpenModal: function() {
-		this.setState({
-			editing: true,
-			editDepth: this.props.depth,
-			editTime: this.props.time
-		});
-	},
-	_onCloseModal: function() {
-		this.setState({
-			editing: false
-		});
-	},
-	_onClickSave: function(e) {
-		e.preventDefault();
-		ProfileActions.updateDive(this.props.id, {
-			depth: this.state.editDepth,
-			time: this.state.editTime
-		});
-		this._onCloseModal();
-		return false;
-	},
 	_onEditTitle: function(e) {
 		ProfileActions.updateDiveTitle(this.props.id, e.target.value);
 	},
-	_onEditDepth: function(e) {
-		this.setState({
-			editDepth: parseInt(e.target.value)
-		});
+	_onMaximizeDepth: function() {
+		var maxDepth = algo.maximizeDepth(ProfileStore.getProfile(), this.props.id);
+		ProfileActions.updateDiveDepth(this.props.id, maxDepth);
 	},
-	_onEditTime: function(e) {
+	_onMaximizeTime: function() {
+		var maxTime = algo.maximizeTime(ProfileStore.getProfile(), this.props.id);
+		ProfileActions.updateDiveTime(this.props.id, maxTime);
+	},
+	_onToggleEdit: function() {
 		this.setState({
-			editTime: parseInt(e.target.value)
+			editing: !this.state.editing
 		});
 	},
 	_adjustDrag: function(pos) {
