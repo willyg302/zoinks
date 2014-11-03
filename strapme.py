@@ -21,9 +21,7 @@ def test():
 	strap.npm('test')
 
 def install():
-	strap.npm('install')
-	with strap.root('app'):
-		strap.bower('install')
+	strap.npm('install').bower('install', root='app')
 
 def default():
 	strap.node('http-server dist', module=True)
