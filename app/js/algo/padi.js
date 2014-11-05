@@ -66,6 +66,12 @@ padi.pressureGroup = function(time, depth, pressureGroup) {
 	var q1 = 552.85426276703538; 
 	var r1 = −20.363335715433173; 
 	var c1 = −1.0231048129283549; 
+//equation 
+	var a1 = (Math.log(time) - m) / n1;
+	var a2 = (Math.log(depth) - q) / r1; 
+	var b1 = Math.pow(a1, 2); 
+	var b2 = Math.pow(a2, 2); 
+	var x = (-1/2) * (b1 + b2); 
 
 	return pressureGroup; 
 };
