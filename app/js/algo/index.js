@@ -11,9 +11,6 @@ var keyMirror = require('react/lib/keyMirror');
 
 var algo = require('./padi');
 
-var timedept; 
-var depth; 
-
 
 algo.status = keyMirror({
 	GOOD: null,
