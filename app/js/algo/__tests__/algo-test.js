@@ -15,4 +15,13 @@ describe('Algorithm', function() {
 	beforeEach(function() {
 		algo = require('../index');
 	});
+
+	it('correctly calculates the time to fly', function() {
+		expect(algo.getTimeToFly({
+			dives: ['dive']
+		})).toEqual(12);
+		expect(algo.getTimeToFly({
+			dives: ['dive', 'another dive']
+		})).toEqual(18);
+	});
 });
