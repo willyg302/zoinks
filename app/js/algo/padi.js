@@ -58,7 +58,7 @@ padi.warningDive = function(time, depth) {
 }; 
 
 //TODO 
-padi.pressureGroup = function(time, depth, pressureGroup) {
+padi.pressureGroup = function(time, depth) {
 	//getting the pressure group?
 	var s1 = (2.2648834727001601*Math.pow(10, 160)); 
 	var m1 = 7.0123592040257003; 
@@ -67,11 +67,13 @@ padi.pressureGroup = function(time, depth, pressureGroup) {
 	var r1 = −20.363335715433173; 
 	var c1 = −1.0231048129283549; 
 //equation 
-	var a1 = (Math.log(time) - m) / n1;
-	var a2 = (Math.log(depth) - q) / r1; 
+	var a1 = (Math.exp(time) - m) / n1;
+	var a2 = (Math.exp(depth) - q) / r1; 
 	var b1 = Math.pow(a1, 2); 
 	var b2 = Math.pow(a2, 2); 
 	var x = (-1/2) * (b1 + b2); 
+
+	pressureGroup = s1 * Math.exp(x) + c1; 
 
 	return pressureGroup; 
 };
