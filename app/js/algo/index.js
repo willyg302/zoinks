@@ -19,20 +19,32 @@ algo.status = keyMirror({
 });
 
 /**
+ * A utility function to determine the RNT for the dive with a given ID.
+ * Naturally, the first dive has an RNT of 0.
+ */
+algo.getRNT = function(profile, id) {
+	if (id === 0) {
+		return 0;
+	}
+	var t = profile.dives[id - 1].time;
+	var d = profile.dives[id - 1].depth;
+	var i = profile.surfaceIntervals[id - 1].time;
+	var pg = this.calcPG(t + this.getRNT(profile, id - 1), d);
+	var rpg = this.calcRPG(pg, i);
+	return this.calcRNT(rpg, profile.dives[id].depth);
+};
+
+/**
  * Given the ID of a dive in the dive profile,
  * returns an enum indicating the status of the dive (good, warning, bad).
  */
 algo.getStatus = function(profile, id) {
-	// @TODO: Actually do this. Should depend on previous dives.
-	var dive = profile.dives[id];
-
-	if (dive.depth === this.MAX_DEPTH || dive.time === this.MAX_TIME) {
+	var d = profile.dives[id].depth;
+	var t = profile.dives[id].time + this.getRNT(profile, id);
+	if (this.isBadDive(t, d)) {
 		return this.status.BAD;
 	}
-	if (dive.depth / this.MAX_DEPTH > 0.9 || dive.time / this.MAX_TIME > 0.9) {
-		return this.status.WARNING;
-	}
-	return this.status.GOOD;
+	return this.isWarningDive(t, d) ? this.status.WARNING : this.status.GOOD;
 };
 
 /**
@@ -43,21 +55,11 @@ algo.getTimeToFly = function(profile) {
 };
 
 /**
- * Given the ID of a surface interval in the dive profile,
- * returns the minimum safe (green) surface interval, in minutes.
- */
-algo.minimizeSurfaceInterval = function(profile, id) {
-	// @ TODO
-	return 10;
-};
-
-/**
  * Given the ID of a dive in the dive profile,
  * returns the maximum safe depth the dive can be adjusted to.
  */
 algo.maximizeDepth = function(profile, id) {
-	// @ TODO
-	return 10; 
+	return this.calcMaximumDepth(profile.dives[id].time + this.getRNT(profile, id));
 };
 
 /**
@@ -65,7 +67,23 @@ algo.maximizeDepth = function(profile, id) {
  * returns the maximum safe time the dive can be adjusted to.
  */
 algo.maximizeTime = function(profile, id) {
-	// @ TODO
-	return 20; 
+	return this.calcMaximumTime(profile.dives[id].depth) - this.getRNT(profile, id);
 };
+
+/**
+ * Given the ID of a surface interval in the dive profile,
+ * returns the minimum safe (green) surface interval, in minutes.
+ */
+algo.minimizeSurfaceInterval = function(profile, id) {
+	var d = profile.dives[id].depth;
+	var t = profile.dives[id].time;
+	var dn = profile.dives[id + 1].depth;
+	var tn = profile.dives[id + 1].time;
+	// @TODO: Handle the case where the rnt might be negative
+	var rnt = this.calcMaximumTime(dn) - tn;
+	var rpg = this.calcRPGFromRNT(rnt, dn);
+	var pg = this.calcPG(t + this.getRNT(profile, id), d);
+	return this.calcSIFromRPG(pg, rpg);
+};
+
 module.exports = algo;

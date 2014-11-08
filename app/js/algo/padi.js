@@ -34,14 +34,35 @@ padi.isBadDive = function(t, d) {
 };
 
 /**
+ * Given the time t of a dive, returns the maximum safe depth.
+ * Note that this does not assume anything about repeat dives!
+ * You will need to adjust t to account for RNT separately if necessary.
+ */
+padi.calcMaximumDepth = function(t) {
+	var a = 113.95854764967993;
+	var b = -0.48150981158021355;
+
+	return Math.min(30, a * Math.pow(t, b));
+};
+
+/**
+ * Given the depth d of a dive, returns the maximum safe time.
+ * Note that this does not assume anything about repeat dive!
+ * You will need to adjust the returned value by RNT if necessary.
+ */
+padi.calcMaximumTime = function(d) {
+	var a = 113.95854764967993;
+	var b = -0.48150981158021355;
+
+	return (d > 30) ? 0 : Math.pow(d / a, 1 / b);
+};
+
+/**
  * Given the time t and depth d,
  * returns true if a dive is considered "warning".
  */
 padi.isWarningDive = function(t, d) {
-	var a = 113.95854764967993;
-	var b = -0.48150981158021355;
-
-	return (d > Math.min(30, a * Math.pow(t, b)));
+	return (d > this.calcMaximumDepth(t));
 };
 
 /**
