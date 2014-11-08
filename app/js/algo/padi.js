@@ -21,85 +21,110 @@ padi.MIN_SURFACE_INTERVAL = 0;
 padi.MAX_SURFACE_INTERVAL = 360;
 padi.DEFAULT_SURFACE_INTERVAL = 60;
 
-var time = null; 
-var depth = null;
-var pressureGroup = null; 
-var rnt = null; 
 
-padi.badDive  = function(time, deptth) {
-	var magicnumB = 105.4459074484564; 
-	var magicnumA = −0.4334667424949577; 
-	var powTimeBadDive = Math.pow(time, magicnumB); 
+/**
+ * Given the time t and depth d,
+ * returns true if a dive is considered "bad".
+ */
+padi.isBadDive = function(t, d) {
+	var a = 105.4459074484564;
+	var b = -0.4334667424949577;
 
-	depth = (magicnumA*powTimeBadDive); 
-
-	if(depth > powTimeBadDive) {
-		return true; 
-	}
-	else {
-		return false; 
-	}
-}; 
-
-padi.warningDive = function(time, depth) {
-	var numA = 113.95854764967993; 
-	var numB = −0.48150981158021355
-	var poweTimeWarnDive = Math.pow(time, numB); 
-	var minValue = Math.min(30, poweTimeWarnDive); 
-
-	depth = (numA*poweTimeWarnDive); 
-
-	if(depth > minValue) {
-		return true; 
-	}
-	else {
-		return false; 
-	}
-}; 
-
-//TODO 
-padi.pressureGroup = function(time, depth) {
-	//getting the pressure group?
-	var s1 = (2.2648834727001601*Math.pow(10, 160)); 
-	var m1 = 7.0123592040257003; 
-	var n1 = 1.7946238745730789; 
-	var q1 = 552.85426276703538; 
-	var r1 = −20.363335715433173; 
-	var c1 = −1.0231048129283549; 
-//equation 
-	var a1 = (Math.exp(time) - m) / n1;
-	var a2 = (Math.exp(depth) - q) / r1; 
-	var b1 = Math.pow(a1, 2); 
-	var b2 = Math.pow(a2, 2); 
-	var x = (-1/2) * (b1 + b2); 
-
-	pressureGroup = s1 * Math.exp(x) + c1; 
-
-	return pressureGroup; 
+	return (d > a * Math.pow(t, b));
 };
 
-//TODO 
-padi.reducePressureGroup = function() {
-	//reducing pressure group 
+/**
+ * Given the time t and depth d,
+ * returns true if a dive is considered "warning".
+ */
+padi.isWarningDive = function(t, d) {
+	var a = 113.95854764967993;
+	var b = -0.48150981158021355;
 
-	var s2 = 116.54299853808371; 
-	var m2 = 33.212036458693376; 
-	var n2 = −15.10250855396535; 
-	var q2 = −186.32853553152427; 
-	var r2 = 112.18008663409428; 
-	var c2 = 0.82154053080283274; 
-	return pressureGroup; 
+	return (d > Math.min(30, a * Math.pow(t, b)));
 };
 
-//TODO 
-padi.rnt = function() {
-	var c3 = 76.081117597706665; 
-	var m3 = 4.1581576427587992; 
-	var n3 = −19.592050053069073; 
-	var q3 = −0.5708514716494717; 
-	var r3 = 0.46114751660456582; 
-	return rnt; 
+/**
+ * Given the time t and depth d,
+ * returns the pressure group of a dive.
+ */
+padi.calcPG = function(t, d) {
+	var s = 2.2648834727001601E+160;
+	var m = 7.0123592040257003;
+	var n = 1.7946238745730789;
+	var q = 552.85426276703538;
+	var r = -20.363335715433173;
+	var c = -1.0231048129283549;
 
+	var a = (Math.log(t) - m) / n;
+	var b = (Math.log(d) - q) / r;
+	return s * Math.pow(Math.E, -0.5 * (a * a + b * b)) + c;
 };
+
+/**
+ * Given the pressure group pg and surface interval i,
+ * returns the reduced pressure group of a dive.
+ */
+padi.calcRPG = function(pg, i) {
+	var s = 116.54299853808371;
+	var m = 33.212036458693376;
+	var n = -15.10250855396535;
+	var q = -186.32853553152427;
+	var r = 112.18008663409428;
+	var c = 0.82154053080283274;
+
+	var a = (pg - m) / n;
+	var b = (i - q) / r;
+	return s * Math.pow(Math.E, -0.5 * (a * a + b * b)) + c;
+};
+
+/**
+ * Given the pressure group pg and reduced pressure group rpg,
+ * returns the appropriate surface interval of a dive.
+ */
+padi.calcSIFromRPG = function(pg, rpg) {
+	var s = 116.54299853808371;
+	var m = 33.212036458693376;
+	var n = -15.10250855396535;
+	var q = -186.32853553152427;
+	var r = 112.18008663409428;
+	var c = 0.82154053080283274;
+
+	var a = (rpg - c) / s;
+	var b = (pg - m) / n;
+	return r * Math.sqrt(-2 * Math.log(a) - b * b) + q;
+};
+
+/**
+ * Given the reduced pressure group rpg and depth d of the next dive,
+ * returns the RNT for the next dive.
+ */
+padi.calcRNT = function(rpg, d) {
+	var c = 76.081117597706665;
+	var m = 4.1581576427587992;
+	var n = -19.592050053069073;
+	var q = -0.5708514716494717;
+	var r = 0.46114751660456582;
+
+	var a = m * Math.log(rpg) + n * Math.log(d);
+	var b = q * Math.log(rpg) + r * Math.log(d);
+	return (c + a) / (1 + b);
+};
+
+/**
+ * Given the RNT rnt and depth d of the next dive,
+ * returns the reduced pressure group of a dive.
+ */
+padi.calcRPGFromRNT = function(rnt, d) {
+	var c = 76.081117597706665;
+	var m = 4.1581576427587992;
+	var n = -19.592050053069073;
+	var q = -0.5708514716494717;
+	var r = 0.46114751660456582;
+
+	var a = c - rnt + (n - rnt * r) * Math.log(d);
+	var b = rnt * q - m;
+	return Math.pow(Math.E, a / b);
+};
+
 module.exports = padi;
-

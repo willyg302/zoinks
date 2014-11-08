@@ -52,16 +52,18 @@ algo.minimizeSurfaceInterval = function(profile, id) {
 };
 
 /**
-*given the id of the dive returns the maximum safe depth 
-*/
+ * Given the ID of a dive in the dive profile,
+ * returns the maximum safe depth the dive can be adjusted to.
+ */
 algo.maximizeDepth = function(profile, id) {
 	// @ TODO
 	return 10; 
 };
 
 /**
-*given the id of the dive  returns the maximum time
-*/
+ * Given the ID of a dive in the dive profile,
+ * returns the maximum safe time the dive can be adjusted to.
+ */
 algo.maximizeTime = function(profile, id) {
 	// @ TODO
 	return 20; 
