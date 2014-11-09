@@ -59,7 +59,8 @@ algo.getTimeToFly = function(profile) {
  * returns the maximum safe depth the dive can be adjusted to.
  */
 algo.maximizeDepth = function(profile, id) {
-	return this.calcMaximumDepth(profile.dives[id].time + this.getRNT(profile, id));
+	var max = this.calcMaximumDepth(profile.dives[id].time + this.getRNT(profile, id));
+	return Math.min(Math.max(max, this.MIN_DEPTH), this.MAX_DEPTH);
 };
 
 /**
@@ -67,7 +68,8 @@ algo.maximizeDepth = function(profile, id) {
  * returns the maximum safe time the dive can be adjusted to.
  */
 algo.maximizeTime = function(profile, id) {
-	return this.calcMaximumTime(profile.dives[id].depth) - this.getRNT(profile, id);
+	var max = this.calcMaximumTime(profile.dives[id].depth) - this.getRNT(profile, id);
+	return Math.min(Math.max(max, this.MIN_TIME), this.MAX_TIME);
 };
 
 /**
@@ -75,15 +77,13 @@ algo.maximizeTime = function(profile, id) {
  * returns the minimum safe (green) surface interval, in minutes.
  */
 algo.minimizeSurfaceInterval = function(profile, id) {
-	var d = profile.dives[id].depth;
-	var t = profile.dives[id].time;
-	var dn = profile.dives[id + 1].depth;
-	var tn = profile.dives[id + 1].time;
-	// @TODO: Handle the case where the rnt might be negative
-	var rnt = this.calcMaximumTime(dn) - tn;
-	var rpg = this.calcRPGFromRNT(rnt, dn);
-	var pg = this.calcPG(t + this.getRNT(profile, id), d);
-	return this.calcSIFromRPG(pg, rpg);
+	var cur = profile.dives[id];
+	var next = profile.dives[id + 1];
+	var rnt = this.calcMaximumTime(next.depth) - next.time;
+	var rpg = this.calcRPGFromRNT(rnt, next.depth);
+	var pg = this.calcPG(cur.time + this.getRNT(profile, id), cur.depth);
+	var min = this.calcSIFromRPG(pg, rpg);
+	return Math.min(Math.max(min, this.MIN_SURFACE_INTERVAL), this.MAX_SURFACE_INTERVAL);
 };
 
 module.exports = algo;

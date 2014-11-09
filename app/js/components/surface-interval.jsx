@@ -77,7 +77,7 @@ var SurfaceInterval = React.createClass({
 	},
 	_onClickMinimize: function() {
 		var minimized = algo.minimizeSurfaceInterval(ProfileStore.getProfile(), this.props.id);
-		this.setState(utils.splitTime(minimized));
+		this.setState(utils.splitTime(Math.ceil(minimized)));
 	},
 	_onSave: function(e) {
 		e.preventDefault();
