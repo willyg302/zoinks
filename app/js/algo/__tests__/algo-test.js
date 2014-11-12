@@ -32,9 +32,19 @@ describe('Algorithm', function() {
 		expect(algo.isWarningDive(55, 16)).toBe(false);
 		expect(algo.isWarningDive(35, 22)).toBe(true);
 		expect(algo.isWarningDive(0, 35)).toBe(true);
+		expect(algo.isWarningDive(25, 28)).toBe(true);
+		expect(algo.isWarningDive(14, 87)).toBe(true);
 	});
 
 	it('correctly determines the status of a repeat dive', function() {
+		//testing for the good dive 
+		expect(algo.getStatus({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 15, time: 45}
+			],
+			surfaceIntervals: [{time: 60}]
+		}, 0)).toEqual(algo.status.GOOD);
 		expect(algo.getStatus({
 			dives: [
 				{depth: 20, time: 20},
@@ -42,6 +52,15 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 60}]
 		}, 1)).toEqual(algo.status.GOOD);
+
+		//testing for the warning dive 
+		expect(algo.getStatus({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 20, time: 30}
+			],
+			surfaceIntervals: [{time: 60}]
+		}, 0)).toEqual(algo.status.WARNING);
 		expect(algo.getStatus({
 			dives: [
 				{depth: 20, time: 20},
@@ -49,6 +68,8 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 60}]
 		}, 1)).toEqual(algo.status.WARNING);
+
+		//testing for bad dives 
 		expect(algo.getStatus({
 			dives: [
 				{depth: 20, time: 20},
