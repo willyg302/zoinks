@@ -98,5 +98,20 @@ describe('Algorithm', function() {
 
 	it('correctly minimizes a surface interval', function() {
 		// @TODO
+		expect(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 15, time: 45}
+			],
+			surfaceIntervals: [{time: 100}]
+		}, 1)).toEqual(100);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 20, time: 30}
+			],
+			surfaceIntervals: [{time: 200}]
+		}, 1)).toEqual(100);
 	});
 });
