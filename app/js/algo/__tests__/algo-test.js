@@ -40,13 +40,13 @@ describe('Algorithm', function() {
 		//testing for the good dive 
 		expect(algo.getStatus({
 			dives: [
-				{depth: 20, time: 20},
-				{depth: 15, time: 45}
+				{depth: 25, time: 25},
+				{depth: 20, time: 55}
 			],
 			surfaceIntervals: [{time: 60}]
-		}, 0)).toEqual(algo.status.GOOD);
+		}, 1)).toEqual(algo.status.GOOD);
 		expect(algo.getStatus({
-			dives: [
+			dives: [≠
 				{depth: 20, time: 20},
 				{depth: 15, time: 45}
 			],
@@ -54,13 +54,6 @@ describe('Algorithm', function() {
 		}, 1)).toEqual(algo.status.GOOD);
 
 		//testing for the warning dive 
-		expect(algo.getStatus({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 30}
-			],
-			surfaceIntervals: [{time: 60}]
-		}, 0)).toEqual(algo.status.WARNING);
 		expect(algo.getStatus({
 			dives: [
 				{depth: 20, time: 20},
