@@ -19,10 +19,12 @@ describe('Algorithm', function() {
 
 	it('correctly determines if a dive is bad', function() {
 		expect(algo.isBadDive(40, 20)).toBe(false);
+		expect(algo.isBadDive(13, 60)).toBe(false);
 		expect(algo.isBadDive(220, 20)).toBe(true);
 		expect(algo.isBadDive(60, 18)).toBe(true);
 		expect(algo.isBadDive(25, 30)).toBe(true);
 		expect(algo.isBadDive(15, 42)).toBe(true);
+		expect(algo.isBadDive(42, 10)).toBe(true);
 	});
 
 	it('correctly determines if a dive is warning', function() {
