@@ -59,12 +59,12 @@ var SurfaceInterval = React.createClass({
 	},
 	_onEditHours: function(e) {
 		this.setState({
-			h: parseInt(e.target.value)
+			h: parseInt(e.target.value || 0)
 		});
 	},
 	_onEditMinutes: function(e) {
 		this.setState({
-			m: parseInt(e.target.value)
+			m: parseInt(e.target.value || 0)
 		});
 	},
 	_onOpenEdit: function() {
