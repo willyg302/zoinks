@@ -37,14 +37,6 @@ describe('Algorithm', function() {
 	});
 
 	it('correctly determines the status of a repeat dive', function() {
-		//testing for the good dive 
-		/*expect(algo.getStatus({
-			dives: [
-				{depth: 25, time: 25},
-				{depth: 20, time: 55}
-			],
-			surfaceIntervals: [{time: 60}]
-		}, 1)).toEqual(algo.status.GOOD);*/
 		expect(algo.getStatus({
 			dives: [
 				{depth: 20, time: 20},
