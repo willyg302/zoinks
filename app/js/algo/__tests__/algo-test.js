@@ -86,6 +86,14 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 100}]
 		}, 0))).toEqual(100);
+
+		expect(Math.round(algo.minimizeDepth({
+			dives: [
+				{depth: 40, time: 40},
+				{depth: 30, time: 45}
+			],
+			surfaceIntervals: [{time: 100}]
+		}, 0))).toEqual(32);
 		// @TODO Repeat dive
 	});
 
@@ -101,6 +109,14 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 100}]
 		}, 0))).toEqual(100);
+
+		expect(Math.round(algo.minimizeTime({
+			dives: [
+				{depth: 40, time: 40},
+				{depth: 30, time: 45}
+			],
+			surfaceIntervals: [{time: 100}]
+		}, 0))).toEqual(32);
 		// @TODO Repeat dive
 	});
 
@@ -109,6 +125,14 @@ describe('Algorithm', function() {
 			dives: [
 				{depth: 20, time: 20},
 				{depth: 15, time: 45}
+			],
+			surfaceIntervals: [{time: 100}]
+		}, 0))).toEqual(32);
+
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 40, time: 40},
+				{depth: 30, time: 45}
 			],
 			surfaceIntervals: [{time: 100}]
 		}, 0))).toEqual(32);
