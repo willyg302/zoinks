@@ -86,6 +86,14 @@ describe('Algorithm', function() {
 		expect(Math.round(algo.calcMaximumDepth(0))).toEqual(30);
 		expect(Math.round(algo.calcMaximumDepth(20))).toEqual(27);
 		expect(Math.round(algo.calcMaximumDepth(70))).toEqual(15);
+			//repeat dive 
+		expect(algo.maximizeDepth({
+			dives: [
+				{depth: 30, time: 20},
+				{depth: 30, time: 50}
+			],
+			surfaceIntervals: [{time: 100}]
+		}, 2)).toEqual(100);
 		// @TODO Repeat dive
 	});
 
@@ -97,9 +105,7 @@ describe('Algorithm', function() {
 	});
 
 	it('correctly minimizes a surface interval', function() {
-		// @TODO
-		/*
-		expect(algo.minimizeSurfaceInterval({
+		/*expect(algo.minimizeSurfaceInterval({
 			dives: [
 				{depth: 20, time: 20},
 				{depth: 15, time: 45}
