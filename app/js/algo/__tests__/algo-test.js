@@ -136,5 +136,38 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 500}]
 		}, 0))).toEqual(121);
+
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 26.9, time: 19.3},
+				{depth: 24.9, time: 12}
+			],
+			surfaceIntervals: [{time: 500}]
+		}, 0))).toEqual(63);
+
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 29.8, time: 13.4},
+				{depth: 19.7 , time: 25.2}
+			],
+			surfaceIntervals: [{time: 400}]
+		}, 0))).toEqual(64);
+
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 36, time: 16.4},
+				{depth: 24.8  , time: 10.4}
+			],
+			surfaceIntervals: [{time: 300}]
+		}, 0))).toEqual(59);
+
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 33.7, time: 13.8},
+				{depth: 16.8, time: 26}
+			],
+			surfaceIntervals: [{time: 300}]
+		}, 0))).toEqual(9);
+
 	});
 });
