@@ -128,21 +128,13 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 100}]
 		}, 0))).toEqual(32);
-/*
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 40, time: 40},
-				{depth: 30, time: 45}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 0))).toEqual(100);
 
 		expect(Math.round(algo.minimizeSurfaceInterval({
 			dives: [
-				{depth: 65, time: 55},
-				{depth: 55, time: 45}
+				{depth: 29.9, time: 17.8},
+				{depth: 23.8, time: 18.1}
 			],
-			surfaceIntervals: [{time: 100}]
-		}, 0))).toEqual(100);*/
+			surfaceIntervals: [{time: 500}]
+		}, 0))).toEqual(121);
 	});
 });
