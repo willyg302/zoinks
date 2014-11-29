@@ -78,6 +78,9 @@ describe('Algorithm', function() {
 		expect(Math.round(algo.calcMaximumDepth(0))).toEqual(30);
 		expect(Math.round(algo.calcMaximumDepth(20))).toEqual(27);
 		expect(Math.round(algo.calcMaximumDepth(70))).toEqual(15);
+		expect(Math.round(algo.calcMaximumDepth(20))).toEqual(27);
+		expect(Math.round(algo.calcMaximumDepth(90))).toEqual(13);
+		expect(Math.round(algo.calcMaximumDepth(45))).toEqual(18);
 			//repeat dive 
 		expect(Math.round(algo.maximizeDepth({
 			dives: [
