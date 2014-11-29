@@ -112,7 +112,15 @@ describe('Algorithm', function() {
 				{depth: 29.6, time: 19.7}
 			],
 			surfaceIntervals: [{time: 100}]
-		}, 1))).toEqual(22);
+		}, 1))).toEqual(22); 
+
+		expect(Math.round(algo.maximizeDepth({
+			dives: [
+				{depth: 100, time: 80},
+				{depth: 90, time: 80}
+			],
+			surfaceIntervals: [{time: 300}]
+		}, 1))).toEqual(14); 
 		// @TODO Repeat dive
 	});
 
