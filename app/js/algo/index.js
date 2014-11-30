@@ -9,6 +9,8 @@
  */
 var keyMirror = require('react/lib/keyMirror');
 
+var utils = require('../utils');
+
 var algo = require('./padi');
 
 
@@ -60,7 +62,7 @@ algo.getTimeToFly = function(profile) {
  */
 algo.maximizeDepth = function(profile, id) {
 	var max = this.calcMaximumDepth(profile.dives[id].time + this.getRNT(profile, id));
-	return Math.min(Math.max(max, this.MIN_DEPTH), this.MAX_DEPTH);
+	return utils.clamp(max, this.MIN_DEPTH, this.MAX_DEPTH);
 };
 
 /**
@@ -69,7 +71,7 @@ algo.maximizeDepth = function(profile, id) {
  */
 algo.maximizeTime = function(profile, id) {
 	var max = this.calcMaximumTime(profile.dives[id].depth) - this.getRNT(profile, id);
-	return Math.min(Math.max(max, this.MIN_TIME), this.MAX_TIME);
+	return utils.clamp(max, this.MIN_TIME, this.MAX_TIME);
 };
 
 /**
@@ -83,7 +85,7 @@ algo.minimizeSurfaceInterval = function(profile, id) {
 	var rpg = this.calcRPGFromRNT(rnt, next.depth);
 	var pg = this.calcPG(cur.time + this.getRNT(profile, id), cur.depth);
 	var min = this.calcSIFromRPG(pg, rpg);
-	return Math.min(Math.max(min, this.MIN_SURFACE_INTERVAL), this.MAX_SURFACE_INTERVAL);
+	return utils.clamp(min, this.MIN_SURFACE_INTERVAL, this.MAX_SURFACE_INTERVAL);
 };
 
 module.exports = algo;

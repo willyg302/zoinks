@@ -103,8 +103,8 @@ var Dive = React.createClass({
 		});
 	},
 	_adjustDrag: function(pos) {
-		var y = Math.min(Math.max(pos.y, 10 * algo.MIN_DEPTH), 10 * algo.MAX_DEPTH);
-		var x = Math.min(Math.max(pos.x, 10 * algo.MIN_TIME + y / 20), 10 * algo.MAX_TIME + y / 20);
+		var y = utils.clamp(pos.y, 10 * algo.MIN_DEPTH, 10 * algo.MAX_DEPTH);
+		var x = utils.clamp(pos.x, 10 * algo.MIN_TIME + y / 20, 10 * algo.MAX_TIME + y / 20);
 		return {
 			x: x,
 			y: y

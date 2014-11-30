@@ -29,4 +29,10 @@ describe('utils', function() {
 		expect(utils.getTimeString(314)).toEqual('5 hr 14 min');
 		expect(utils.getTimeString(0)).toEqual('0 min');
 	});
+
+	it('implements clamp correctly', function() {
+		expect(utils.clamp(1, 0, 2)).toEqual(1);
+		expect(utils.clamp(0, 1, 2)).toEqual(1);
+		expect(utils.clamp(2, 0, 1)).toEqual(1);
+	});
 });

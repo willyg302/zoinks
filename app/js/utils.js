@@ -39,4 +39,8 @@ utils.getTimeString = function(min) {
 	].join(' ').trim();
 };
 
+utils.clamp = function(val, min, max) {
+	return Math.min(Math.max(val, min), max);
+};
+
 module.exports = utils;

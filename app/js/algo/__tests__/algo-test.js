@@ -11,6 +11,7 @@
 
 jest.dontMock('../index');
 jest.dontMock('../padi');
+jest.dontMock('../../utils');
 
 describe('Algorithm', function() {
 	beforeEach(function() {
