@@ -263,5 +263,13 @@ describe('Algorithm', function() {
 			surfaceIntervals: [{time: 300}]
 		}, 0))).toEqual(9);
 
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 20, time: 20},
+				{depth: 20, time: 20}
+			],
+			surfaceIntervals: [{time: 300}]
+		}, 1))).toEqual(48);
 	});
 });
