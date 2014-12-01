@@ -40,6 +40,13 @@ describe('Algorithm', function() {
 		expect(algo.isWarningDive(0, 35)).toBe(true);
 		expect(algo.isWarningDive(25, 28)).toBe(true);
 		expect(algo.isWarningDive(14, 87)).toBe(true);
+		expect(algo.isWarningDive(20, 20)).toBe(false);
+		expect(algo.isWarningDive(100, 100)).toBe(true);
+		expect(algo.isWarningDive(80, 90)).toBe(true);
+		expect(algo.isWarningDive(200, 200)).toBe(true);
+		expect(algo.isWarningDive(15, 15)).toBe(false);
+		expect(algo.isWarningDive(300, 300)).toBe(true);
+
 	});
 
 	it('correctly determines the status of a repeat dive', function() {
