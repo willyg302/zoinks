@@ -133,7 +133,11 @@ describe('Algorithm', function() {
 	it('correctly maximizes the time of a dive', function() {
 		expect(Math.round(algo.calcMaximumTime(10))).toEqual(157);
 		expect(Math.round(algo.calcMaximumTime(40))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(55))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(60))).toEqual(0);
 		expect(Math.round(algo.calcMaximumTime(25))).toEqual(23);
+		expect(Math.round(algo.calcMaximumTime(16))).toEqual(59);
+		expect(Math.round(algo.calcMaximumTime(35))).toEqual(0);
 		//repeat dive 
 		/*expect(Math.round(algo.maximizeTime({
 			dives: [
