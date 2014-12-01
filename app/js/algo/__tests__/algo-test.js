@@ -277,7 +277,8 @@ describe('Algorithm', function() {
 				{depth: 20, time: 20},
 				{depth: 20, time: 20}
 			],
-			surfaceIntervals: [{time: 300}, {time: 200}]
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}]
 		}, 1))).toEqual(48);
 
 		expect(Math.round(algo.minimizeSurfaceInterval({
@@ -287,7 +288,26 @@ describe('Algorithm', function() {
 				{depth: 20, time: 20},
 				{depth: 20, time: 20}
 			],
-			surfaceIntervals: [{time: 300}, {time: 200}, {time: 350}]
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350}]
 		}, 2))).toEqual(50);
+
+		//first and second, good dive 
+		//third and forth, warning dive 
+		//fifth, bad dive 
+		expect(Math.round(algo.minimizeSurfaceInterval({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 3))).toEqual(104);
 	});
 });
