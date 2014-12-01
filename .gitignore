@@ -6,3 +6,4 @@ dist/
 docs/*
 !algo.tex
 !raw_algo_data.md
+!README.md

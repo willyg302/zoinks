@@ -7,6 +7,11 @@
  * @repository https://github.com/willyg302/zoinks
  * @license MIT
  */
+
+/**
+ * NOTE: For more information on this implementation, please refer to the
+ * docs/ directory of this repository.
+ */
 var padi = {};
 
 padi.MIN_DEPTH = 10;
