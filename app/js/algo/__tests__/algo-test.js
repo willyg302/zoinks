@@ -138,6 +138,15 @@ describe('Algorithm', function() {
 		expect(Math.round(algo.calcMaximumTime(25))).toEqual(23);
 		expect(Math.round(algo.calcMaximumTime(16))).toEqual(59);
 		expect(Math.round(algo.calcMaximumTime(35))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(80))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(78))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(5))).toEqual(660);
+		expect(Math.round(algo.calcMaximumTime(100))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(150))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(200))).toEqual(0);
+		expect(Math.round(algo.calcMaximumTime(3))).toEqual(1908);
+		expect(Math.round(algo.calcMaximumTime(7))).toEqual(328);
+		expect(Math.round(algo.calcMaximumTime(2))).toEqual(4429);
 		//repeat dive 
 		/*expect(Math.round(algo.maximizeTime({
 			dives: [
