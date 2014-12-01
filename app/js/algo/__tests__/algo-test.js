@@ -211,6 +211,7 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 500}]
 		}, 1))).toEqual(5);
+
 		// @TODO Repeat dive
 	});
 
