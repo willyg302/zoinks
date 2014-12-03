@@ -14,68 +14,164 @@ jest.dontMock('../padi');
 jest.dontMock('../../utils');
 
 describe('Algorithm', function() {
+	var goodDives = [
+		{t: 0, d: 10},
+		{t: 133, d: 10},
+		{t: 101, d: 12},
+		{t: 73, d: 14},
+		{t: 56, d: 16},
+		{t: 46, d: 18},
+		{t: 36, d: 20},
+		{t: 29, d: 22},
+		{t: 22, d: 25},
+	];
+
+	var warningDives = [
+		{t: 160, d: 10},
+		{t: 116, d: 12},
+		{t: 82, d: 14},
+		{t: 63, d: 16},
+		{t: 51, d: 18},
+		{t: 40, d: 20},
+		{t: 32, d: 22},
+		{t: 25, d: 25},
+		{t: 0, d: 31},
+	];
+
+	var badDives = [
+		{t: 239, d: 10},
+		{t: 157, d: 12},
+		{t: 108, d: 14},
+		{t: 82, d: 16},
+		{t: 66, d: 18},
+		{t: 55, d: 20},
+		{t: 47, d: 22},
+		{t: 39, d: 25},
+		{t: 10, d: 42},
+	];
+
+	var maximumDepths = [
+		{t: 0, d: 30},
+		{t: 20, d: 27},
+		{t: 40, d: 19},
+		{t: 60, d: 16},
+		{t: 80, d: 14},
+		{t: 100, d: 12},
+		{t: 120, d: 11},
+		{t: 140, d: 11},
+		{t: 160, d: 10},
+	];
+
+	var maximumTimes = [
+		{d: 10, t: 157},
+		{d: 12, t: 107},
+		{d: 14, t: 78},
+		{d: 16, t: 59},
+		{d: 18, t: 46},
+		{d: 20, t: 37},
+		{d: 25, t: 23},
+		{d: 30, t: 16},
+		{d: 35, t: 0},
+	];
+
+	var twoDivesGood = {
+		dives: [
+			{depth: 20, time: 20},
+			{depth: 15, time: 45}
+		],
+		surfaceIntervals: [{time: 60}]
+	};
+
+	var twoDivesWarning = {
+		dives: [
+			{depth: 20, time: 20},
+			{depth: 20, time: 30}
+		],
+		surfaceIntervals: [{time: 60}]
+	};
+
+	var twoDivesBad = {
+		dives: [
+			{depth: 30, time: 20},
+			{depth: 30, time: 50}
+		],
+		surfaceIntervals: [{time: 100}]
+	};
+
+	var threeDives = {
+		dives: [
+			{depth: 20, time: 20},
+			{depth: 20, time: 20},
+			{depth: 20, time: 20}
+		],
+		surfaceIntervals: [{time: 0}, {time: 0}]
+	};
+
+	var fiveDives = {
+		dives: [
+			{depth: 25, time: 20},
+			{depth: 18, time: 18},
+			{depth: 20, time: 30},
+			{depth: 20, time: 30},
+			{depth: 25, time: 45}
+		],
+		surfaceIntervals: [{time: 100}, {time: 100}, {time: 100}, {time: 100}]
+	};
+
+	var testSingleDiveStatus = function(t, d, status) {
+		expect(algo.getStatus({
+			dives: [{depth: d, time: t}],
+			surfaceIntervals: []
+		}, 0)).toEqual(status);
+		expect(algo.isBadDive(t, d)).toBe(status === algo.status.BAD);
+		// A bad dive is considered to be in the warning area as well
+		expect(algo.isWarningDive(t, d)).toBe(status !== algo.status.GOOD);
+	};
+
 	beforeEach(function() {
 		algo = require('../index');
 	});
 
-	it('correctly determines if a dive is bad', function() {
-		expect(algo.isBadDive(40, 20)).toBe(false);
-		expect(algo.isBadDive(13, 60)).toBe(true);
-		expect(algo.isBadDive(220, 20)).toBe(true);
-		expect(algo.isBadDive(60, 18)).toBe(true);
-		expect(algo.isBadDive(25, 30)).toBe(true);
-		expect(algo.isBadDive(15, 42)).toBe(true);
-		expect(algo.isBadDive(42, 10)).toBe(false);
-		expect(algo.isBadDive(100, 100)).toBe(true);
-		expect(algo.isBadDive(35, 50)).toBe(true);
-		expect(algo.isBadDive(10, 90)).toBe(true);
-		expect(algo.isBadDive(12, 25)).toBe(false);
-		expect(algo.isBadDive(28, 50)).toBe(true);
+	it('correctly determines if a dive is good', function() {
+		goodDives.map(function(dive) {
+			testSingleDiveStatus(dive.t, dive.d, algo.status.GOOD);
+		});
 	});
 
 	it('correctly determines if a dive is warning', function() {
-		expect(algo.isWarningDive(180, 10)).toBe(true);
-		expect(algo.isWarningDive(55, 16)).toBe(false);
-		expect(algo.isWarningDive(35, 22)).toBe(true);
-		expect(algo.isWarningDive(0, 35)).toBe(true);
-		expect(algo.isWarningDive(25, 28)).toBe(true);
-		expect(algo.isWarningDive(14, 87)).toBe(true);
-		expect(algo.isWarningDive(20, 20)).toBe(false);
-		expect(algo.isWarningDive(100, 100)).toBe(true);
-		expect(algo.isWarningDive(80, 90)).toBe(true);
-		expect(algo.isWarningDive(200, 200)).toBe(true);
-		expect(algo.isWarningDive(15, 15)).toBe(false);
-		expect(algo.isWarningDive(300, 300)).toBe(true);
+		warningDives.map(function(dive) {
+			testSingleDiveStatus(dive.t, dive.d, algo.status.WARNING);
+		});
+	});
 
+	it('correctly determines if a dive is bad', function() {
+		badDives.map(function(dive) {
+			testSingleDiveStatus(dive.t, dive.d, algo.status.BAD);
+		});
 	});
 
 	it('correctly determines the status of a repeat dive', function() {
-		expect(algo.getStatus({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 15, time: 45}
-			],
-			surfaceIntervals: [{time: 60}]
-		}, 1)).toEqual(algo.status.GOOD);
+		expect(algo.getStatus(twoDivesGood, 1)).toEqual(algo.status.GOOD);
+		expect(algo.getStatus(twoDivesWarning, 1)).toEqual(algo.status.WARNING);
+		expect(algo.getStatus(twoDivesBad, 1)).toEqual(algo.status.BAD);
 
-		//testing for the warning dive 
-		expect(algo.getStatus({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 30}
-			],
-			surfaceIntervals: [{time: 60}]
-		}, 1)).toEqual(algo.status.WARNING);
+		[
+			algo.status.GOOD,
+			algo.status.WARNING,
+			algo.status.BAD
+		].map(function(status, i) {
+			expect(algo.getStatus(threeDives, i)).toEqual(status);
+		});
 
-		//testing for bad dives 
-		expect(algo.getStatus({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20}
-			],
-			surfaceIntervals: [{time: 60}, {time: 0}]
-		}, 2)).toEqual(algo.status.BAD);
+		[
+			algo.status.GOOD,
+			algo.status.GOOD,
+			algo.status.WARNING,
+			algo.status.WARNING,
+			algo.status.BAD
+		].map(function(status, i) {
+			expect(algo.getStatus(fiveDives, i)).toEqual(status);
+		});
 	});
 
 	it('correctly calculates the time to fly', function() {
@@ -87,233 +183,32 @@ describe('Algorithm', function() {
 		})).toEqual(18);
 	});
 
-	it('correctly maximizes the depth of a dive', function() {
-		expect(Math.round(algo.calcMaximumDepth(0))).toEqual(30);
-		expect(Math.round(algo.calcMaximumDepth(20))).toEqual(27);
-		expect(Math.round(algo.calcMaximumDepth(70))).toEqual(15);
-		expect(Math.round(algo.calcMaximumDepth(20))).toEqual(27);
-		expect(Math.round(algo.calcMaximumDepth(90))).toEqual(13);
-		expect(Math.round(algo.calcMaximumDepth(45))).toEqual(18);
-			//repeat dive 
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 30, time: 20},
-				{depth: 30, time: 50}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 0))).toEqual(27);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 30, time: 20},
-				{depth: 30, time: 50}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 1))).toEqual(16);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 40, time: 20},
-				{depth: 50, time: 40}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 1))).toEqual(19);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 50, time: 20.1},
-				{depth: 29.6, time: 19.7}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 1))).toEqual(22); 
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 100, time: 80},
-				{depth: 90, time: 80}
-			],
-			surfaceIntervals: [{time: 300}]
-		}, 1))).toEqual(14); 
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 65, time: 30},
-				{depth: 100, time: 20}
-			],
-			surfaceIntervals: [{time: 300}]
-		}, 1))).toEqual(30); 
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 55, time: 55}
-			],
-			surfaceIntervals: [{time: 300}]
-		}, 1))).toEqual(17); 
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 55, time: 55}
-			],
-			surfaceIntervals: [{time: 300}]
-		}, 1))).toEqual(17); 
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}]
-		}, 2))).toEqual(23);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350}]
-		}, 3))).toEqual(23);
-
-
-		//first and second, good dive 
-		//third and forth, warning dive 
-		//fifth, bad dive 
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 26.8, time: 19.8},
-				{depth: 18, time: 18.1},
-				{depth: 19, time: 33.8},
-				{depth: 16.7, time: 28},
-				{depth: 25, time: 14.9}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350},
-								{time: 400}]
-		}, 0))).toEqual(27);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 26.8, time: 19.8},
-				{depth: 18, time: 18.1},
-				{depth: 19, time: 33.8},
-				{depth: 16.7, time: 28},
-				{depth: 25, time: 14.9}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350},
-								{time: 400}]
-		}, 1))).toEqual(24);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 26.8, time: 19.8},
-				{depth: 18, time: 18.1},
-				{depth: 19, time: 33.8},
-				{depth: 16.7, time: 28},
-				{depth: 25, time: 14.9}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350},
-								{time: 400}]
-		}, 2))).toEqual(19);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 26.8, time: 19.8},
-				{depth: 18, time: 18.1},
-				{depth: 19, time: 33.8},
-				{depth: 16.7, time: 28},
-				{depth: 25, time: 14.9}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350},
-								{time: 400}]
-		}, 3))).toEqual(20);
-
-		expect(Math.round(algo.maximizeDepth({
-			dives: [
-				{depth: 26.8, time: 19.8},
-				{depth: 18, time: 18.1},
-				{depth: 19, time: 33.8},
-				{depth: 16.7, time: 28},
-				{depth: 25, time: 14.9}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350},
-								{time: 400}]
-		}, 4))).toEqual(27);
+	it('correctly maximizes the depth of a single dive', function() {
+		maximumDepths.map(function(dive) {
+			expect(Math.round(algo.calcMaximumDepth(dive.t))).toEqual(dive.d);
+		});
 	});
 
-	it('correctly maximizes the time of a dive', function() {
-		expect(Math.round(algo.calcMaximumTime(10))).toEqual(157);
-		expect(Math.round(algo.calcMaximumTime(40))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(55))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(60))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(25))).toEqual(23);
-		expect(Math.round(algo.calcMaximumTime(16))).toEqual(59);
-		expect(Math.round(algo.calcMaximumTime(35))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(80))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(78))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(5))).toEqual(660);
-		expect(Math.round(algo.calcMaximumTime(100))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(150))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(200))).toEqual(0);
-		expect(Math.round(algo.calcMaximumTime(3))).toEqual(1908);
-		expect(Math.round(algo.calcMaximumTime(7))).toEqual(328);
-		expect(Math.round(algo.calcMaximumTime(2))).toEqual(4429);
-		//repeat dive 
-		expect(Math.round(algo.maximizeTime({
-			dives: [
-				{depth: 30, time: 20},
-				{depth: 30, time: 50}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 0))).toEqual(16);
+	it('correctly maximizes the depth of a repeat dive', function() {
+		expect(Math.round(algo.maximizeDepth(twoDivesBad, 0))).toEqual(27);
+		expect(Math.round(algo.maximizeDepth(twoDivesBad, 1))).toEqual(16);
 
-		expect(Math.round(algo.maximizeTime({
-			dives: [
-				{depth: 40, time: 40},
-				{depth: 30, time: 45}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 0))).toEqual(0);
+		[27, 22, 19, 18, 16].map(function(depth, i) {
+			expect(Math.round(algo.maximizeDepth(fiveDives, i))).toEqual(depth);
+		});
+	});
 
-		expect(Math.round(algo.maximizeTime({
-			dives: [
-				{depth: 30, time: 20},
-				{depth: 30, time: 50}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 1))).toEqual(9);
+	it('correctly maximizes the time of a single dive', function() {
+		maximumTimes.map(function(dive) {
+			expect(Math.round(algo.calcMaximumTime(dive.d))).toEqual(dive.t);
+		});
+	});
 
-		expect(Math.round(algo.maximizeTime({
-			dives: [
-				{depth: 15, time: 25},
-				{depth: 50, time: 40}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 1))).toEqual(0);
+	it('correctly maximizes the time of a repeat dive', function() {
+		expect(Math.round(algo.maximizeTime(twoDivesBad, 0))).toEqual(16);
+		expect(Math.round(algo.maximizeTime(twoDivesBad, 1))).toEqual(9);
 
-		expect(Math.round(algo.maximizeTime({
-			dives: [
-				{depth: 150, time: 150},
-				{depth: 100, time: 95}
-			],
-			surfaceIntervals: [{time: 500}]
-		}, 1))).toEqual(5);
-
+<<<<<<< HEAD
 		expect(Math.round(algo.maximizeTime({
 			dives: [
 				{depth: 20, time: 20},
@@ -409,94 +304,27 @@ describe('Algorithm', function() {
 								{time: 350},
 								{time: 400}]
 		}, 4))).toEqual(19);
+=======
+		[23, 34, 26, 23, 12].map(function(depth, i) {
+			expect(Math.round(algo.maximizeTime(fiveDives, i))).toEqual(depth);
+		});
+>>>>>>> FETCH_HEAD
 	});
 
 	it('correctly minimizes a surface interval', function() {
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 15, time: 45}
-			],
-			surfaceIntervals: [{time: 100}]
-		}, 0))).toEqual(32);
+		expect(Math.round(algo.minimizeSurfaceInterval(twoDivesGood, 0))).toEqual(32);
+		expect(Math.round(algo.minimizeSurfaceInterval(twoDivesWarning, 0))).toEqual(183);
 
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 29.9, time: 17.8},
-				{depth: 23.8, time: 18.1}
-			],
-			surfaceIntervals: [{time: 500}]
-		}, 0))).toEqual(121);
+		// NaN is returned when the second dive is bad even if the surface interval is maximized
+		expect(isNaN(Math.round(algo.minimizeSurfaceInterval(twoDivesBad, 0)))).toBe(true);
 
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 26.9, time: 19.3},
-				{depth: 24.9, time: 12}
-			],
-			surfaceIntervals: [{time: 500}]
-		}, 0))).toEqual(63);
+		[28, 79].map(function(si, i) {
+			expect(Math.round(algo.minimizeSurfaceInterval(threeDives, i))).toEqual(si);
+		});
 
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 29.8, time: 13.4},
-				{depth: 19.7 , time: 25.2}
-			],
-			surfaceIntervals: [{time: 400}]
-		}, 0))).toEqual(64);
-
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 36, time: 16.4},
-				{depth: 24.8  , time: 10.4}
-			],
-			surfaceIntervals: [{time: 300}]
-		}, 0))).toEqual(59);
-
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 33.7, time: 13.8},
-				{depth: 16.8, time: 26}
-			],
-			surfaceIntervals: [{time: 300}]
-		}, 0))).toEqual(9);
-
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}]
-		}, 1))).toEqual(48);
-
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20},
-				{depth: 20, time: 20}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350}]
-		}, 2))).toEqual(50);
-
-		//first and second, good dive 
-		//third and forth, warning dive 
-		//fifth, bad dive 
-		expect(Math.round(algo.minimizeSurfaceInterval({
-			dives: [
-				{depth: 26.8, time: 19.8},
-				{depth: 18, time: 18.1},
-				{depth: 19, time: 33.8},
-				{depth: 16.7, time: 28},
-				{depth: 25, time: 14.9}
-			],
-			surfaceIntervals: [{time: 300}, 
-								{time: 200}, 
-								{time: 350},
-								{time: 400}]
-		}, 3))).toEqual(104);
+		// Last should be NaN
+		[4, 196, 214].map(function(si, i) {
+			expect(Math.round(algo.minimizeSurfaceInterval(fiveDives, i))).toEqual(si);
+		});
 	});
 });
