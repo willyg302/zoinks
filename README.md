@@ -2,8 +2,6 @@
 
 ---
 
-[![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](https://raw.githubusercontent.com/willyg302/zoinks/master/LICENSE)
-
 SCUBA Dive Planner Project for ICS 414. Try it live [here](http://willyg302.github.io/zoinks), or watch the [release video](https://www.youtube.com/watch?v=4OICcNu61Uc)!
 
 ## Disclaimer
