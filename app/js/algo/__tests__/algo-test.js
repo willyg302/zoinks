@@ -76,6 +76,89 @@ describe('Algorithm', function() {
 			],
 			surfaceIntervals: [{time: 60}, {time: 0}]
 		}, 2)).toEqual(algo.status.BAD);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 20, time: 20},
+				{depth: 20, time: 20},
+				{depth: 20, time: 20}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350}]
+		}, 2)).toEqual(algo.status.GOOD);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 0)).toEqual(algo.status.GOOD);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 1)).toEqual(algo.status.GOOD);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 2)).toEqual(algo.status.GOOD);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 3)).toEqual(algo.status.GOOD);
+
+		expect(algo.getStatus({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 4)).toEqual(algo.status.GOOD);
+
 	});
 
 	it('correctly calculates the time to fly', function() {
