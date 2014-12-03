@@ -314,7 +314,101 @@ describe('Algorithm', function() {
 			surfaceIntervals: [{time: 500}]
 		}, 1))).toEqual(5);
 
-		// @TODO Repeat dive
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 20, time: 20},
+				{depth: 20, time: 20}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}]
+		}, 2))).toEqual(30);
+
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 20, time: 20},
+				{depth: 20, time: 20},
+				{depth: 20, time: 20},
+				{depth: 20, time: 20}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350}]
+		}, 3))).toEqual(30);
+
+
+		//first and second, good dive 
+		//third and forth, warning dive 
+		//fifth, bad dive 
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 0))).toEqual(20);
+
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 1))).toEqual(39);
+
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 2))).toEqual(34);
+
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 3))).toEqual(46);
+
+		expect(Math.round(algo.maximizeTime({
+			dives: [
+				{depth: 26.8, time: 19.8},
+				{depth: 18, time: 18.1},
+				{depth: 19, time: 33.8},
+				{depth: 16.7, time: 28},
+				{depth: 25, time: 14.9}
+			],
+			surfaceIntervals: [{time: 300}, 
+								{time: 200}, 
+								{time: 350},
+								{time: 400}]
+		}, 4))).toEqual(19);
 	});
 
 	it('correctly minimizes a surface interval', function() {
